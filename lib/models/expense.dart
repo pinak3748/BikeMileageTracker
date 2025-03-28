@@ -1,61 +1,72 @@
 class Expense {
   final int? id;
   final int bikeId;
-  final DateTime date;
   final String category;
   final String title;
+  final DateTime date;
   final double amount;
-  final String? notes;
-  final String? receiptUrl;
   final double? odometer;
+  final String? vendor;
+  final String? description;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Expense({
     this.id,
     required this.bikeId,
-    required this.date,
     required this.category,
     required this.title,
+    required this.date,
     required this.amount,
-    this.notes,
-    this.receiptUrl,
     this.odometer,
-  });
+    this.vendor,
+    this.description,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  })  : createdAt = createdAt ?? DateTime.now(),
+        updatedAt = updatedAt ?? DateTime.now();
 
   Expense copyWith({
     int? id,
     int? bikeId,
-    DateTime? date,
     String? category,
     String? title,
+    DateTime? date,
     double? amount,
-    String? notes,
-    String? receiptUrl,
     double? odometer,
+    String? vendor,
+    String? description,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return Expense(
       id: id ?? this.id,
       bikeId: bikeId ?? this.bikeId,
-      date: date ?? this.date,
       category: category ?? this.category,
       title: title ?? this.title,
+      date: date ?? this.date,
       amount: amount ?? this.amount,
-      notes: notes ?? this.notes,
-      receiptUrl: receiptUrl ?? this.receiptUrl,
       odometer: odometer ?? this.odometer,
+      vendor: vendor ?? this.vendor,
+      description: description ?? this.description,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? DateTime.now(),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      if (id != null) 'id': id,
       'bike_id': bikeId,
-      'date': date.toIso8601String(),
       'category': category,
       'title': title,
+      'date': date.millisecondsSinceEpoch,
       'amount': amount,
-      'notes': notes,
-      'receipt_url': receiptUrl,
       'odometer': odometer,
+      'vendor': vendor,
+      'description': description,
+      'created_at': createdAt.millisecondsSinceEpoch,
+      'updated_at': updatedAt.millisecondsSinceEpoch,
     };
   }
 
@@ -63,18 +74,15 @@ class Expense {
     return Expense(
       id: map['id'],
       bikeId: map['bike_id'],
-      date: DateTime.parse(map['date']),
       category: map['category'],
       title: map['title'],
+      date: DateTime.fromMillisecondsSinceEpoch(map['date']),
       amount: map['amount'],
-      notes: map['notes'],
-      receiptUrl: map['receipt_url'],
       odometer: map['odometer'],
+      vendor: map['vendor'],
+      description: map['description'],
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at']),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updated_at']),
     );
-  }
-
-  @override
-  String toString() {
-    return 'Expense{id: $id, date: $date, category: $category, title: $title, amount: $amount}';
   }
 }

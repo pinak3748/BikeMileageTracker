@@ -1,83 +1,79 @@
-import 'package:moto_tracker/utils/constants.dart';
-
 class FuelEntry {
   final int? id;
   final int bikeId;
   final DateTime date;
   final double odometer;
-  final double quantity;
-  final double costPerUnit;
-  final double totalCost;
-  final FillType fillType;
+  final double volume;
+  final double cost;
+  final bool isFillup;
   final String? fuelType;
-  final String? station;
+  final String? stationName;
   final String? notes;
-  final double? tripDistance;
-  final double? efficiency;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   FuelEntry({
     this.id,
     required this.bikeId,
     required this.date,
     required this.odometer,
-    required this.quantity,
-    required this.costPerUnit,
-    required this.totalCost,
-    required this.fillType,
+    required this.volume,
+    required this.cost,
+    required this.isFillup,
     this.fuelType,
-    this.station,
+    this.stationName,
     this.notes,
-    this.tripDistance,
-    this.efficiency,
-  });
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  })  : createdAt = createdAt ?? DateTime.now(),
+        updatedAt = updatedAt ?? DateTime.now();
+
+  double get pricePerLiter => volume > 0 ? cost / volume : 0;
 
   FuelEntry copyWith({
     int? id,
     int? bikeId,
     DateTime? date,
     double? odometer,
-    double? quantity,
-    double? costPerUnit,
-    double? totalCost,
-    FillType? fillType,
+    double? volume,
+    double? cost,
+    bool? isFillup,
     String? fuelType,
-    String? station,
+    String? stationName,
     String? notes,
-    double? tripDistance,
-    double? efficiency,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return FuelEntry(
       id: id ?? this.id,
       bikeId: bikeId ?? this.bikeId,
       date: date ?? this.date,
       odometer: odometer ?? this.odometer,
-      quantity: quantity ?? this.quantity,
-      costPerUnit: costPerUnit ?? this.costPerUnit,
-      totalCost: totalCost ?? this.totalCost,
-      fillType: fillType ?? this.fillType,
+      volume: volume ?? this.volume,
+      cost: cost ?? this.cost,
+      isFillup: isFillup ?? this.isFillup,
       fuelType: fuelType ?? this.fuelType,
-      station: station ?? this.station,
+      stationName: stationName ?? this.stationName,
       notes: notes ?? this.notes,
-      tripDistance: tripDistance ?? this.tripDistance,
-      efficiency: efficiency ?? this.efficiency,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? DateTime.now(),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      if (id != null) 'id': id,
       'bike_id': bikeId,
-      'date': date.toIso8601String(),
+      'date': date.millisecondsSinceEpoch,
       'odometer': odometer,
-      'quantity': quantity,
-      'cost_per_unit': costPerUnit,
-      'total_cost': totalCost,
-      'fill_type': fillType.index,
+      'volume': volume,
+      'cost': cost,
+      'is_fillup': isFillup ? 1 : 0,
       'fuel_type': fuelType,
-      'station': station,
+      'station_name': stationName,
       'notes': notes,
-      'trip_distance': tripDistance,
-      'efficiency': efficiency,
+      'created_at': createdAt.millisecondsSinceEpoch,
+      'updated_at': updatedAt.millisecondsSinceEpoch,
     };
   }
 
@@ -85,22 +81,16 @@ class FuelEntry {
     return FuelEntry(
       id: map['id'],
       bikeId: map['bike_id'],
-      date: DateTime.parse(map['date']),
+      date: DateTime.fromMillisecondsSinceEpoch(map['date']),
       odometer: map['odometer'],
-      quantity: map['quantity'],
-      costPerUnit: map['cost_per_unit'],
-      totalCost: map['total_cost'],
-      fillType: FillType.values[map['fill_type']],
+      volume: map['volume'],
+      cost: map['cost'],
+      isFillup: map['is_fillup'] == 1,
       fuelType: map['fuel_type'],
-      station: map['station'],
+      stationName: map['station_name'],
       notes: map['notes'],
-      tripDistance: map['trip_distance'],
-      efficiency: map['efficiency'],
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at']),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updated_at']),
     );
-  }
-
-  @override
-  String toString() {
-    return 'FuelEntry{id: $id, date: $date, odometer: $odometer, quantity: $quantity, totalCost: $totalCost, efficiency: $efficiency}';
   }
 }

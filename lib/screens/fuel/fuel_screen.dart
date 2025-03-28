@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../utils/constants.dart';
+import '../../providers/bike_provider.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/empty_state.dart';
-import '../../providers/bike_provider.dart';
+import '../../utils/constants.dart';
 
 class FuelScreen extends StatelessWidget {
   const FuelScreen({super.key});
@@ -15,11 +15,11 @@ class FuelScreen extends StatelessWidget {
     if (!bikeProvider.hasBikes) {
       return Scaffold(
         appBar: const CustomAppBar(
-          title: 'Fuel Tracking',
+          title: 'Fuel Log',
           showBikeSelector: true,
         ),
         body: EmptyState(
-          message: 'Add your motorcycle to start tracking fuel entries',
+          message: 'Add your motorcycle to start tracking fuel',
           icon: Icons.motorcycle,
           actionLabel: 'Add Motorcycle',
           onActionPressed: () {
@@ -31,11 +31,11 @@ class FuelScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: const CustomAppBar(
-        title: 'Fuel Tracking',
+        title: 'Fuel Log',
         showBikeSelector: true,
       ),
       body: EmptyState(
-        message: 'Track your fuel consumption, costs, and efficiency',
+        message: 'Keep track of your fuel consumption and expenses',
         icon: Icons.local_gas_station,
         actionLabel: 'Add Fuel Entry',
         onActionPressed: () {
@@ -54,7 +54,7 @@ class FuelScreen extends StatelessWidget {
             ),
           );
         },
-        backgroundColor: AppColors.accent,
+        backgroundColor: AppColors.info,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );

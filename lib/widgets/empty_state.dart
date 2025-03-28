@@ -7,8 +7,7 @@ class EmptyState extends StatelessWidget {
   final String? actionLabel;
   final VoidCallback? onActionPressed;
   final double iconSize;
-  final Color? iconColor;
-  final TextStyle? messageStyle;
+  final Color iconColor;
 
   const EmptyState({
     super.key,
@@ -17,38 +16,50 @@ class EmptyState extends StatelessWidget {
     this.actionLabel,
     this.onActionPressed,
     this.iconSize = 80,
-    this.iconColor,
-    this.messageStyle,
+    this.iconColor = AppColors.primary,
   });
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               icon,
               size: iconSize,
-              color: iconColor ?? AppColors.primary.withOpacity(0.4),
+              color: iconColor.withOpacity(0.7),
             ),
             const SizedBox(height: 24),
             Text(
               message,
-              style: messageStyle ??
-                  TextStyle(
-                    fontSize: 16,
-                    color: AppColors.textLight,
-                  ),
               textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey[700],
+              ),
             ),
             if (actionLabel != null && onActionPressed != null) ...[
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: onActionPressed,
-                child: Text(actionLabel!),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                ),
+                child: Text(
+                  actionLabel!,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
           ],

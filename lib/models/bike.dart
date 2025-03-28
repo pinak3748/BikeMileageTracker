@@ -1,5 +1,5 @@
 class Bike {
-  final String? id;
+  final int? id;
   final String name;
   final String make;
   final String model;
@@ -11,7 +11,8 @@ class Bike {
   final double initialOdometer;
   final double currentOdometer;
   final String? notes;
-  final String? imageUrl;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Bike({
     this.id,
@@ -26,11 +27,15 @@ class Bike {
     required this.initialOdometer,
     required this.currentOdometer,
     this.notes,
-    this.imageUrl,
-  });
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  })  : createdAt = createdAt ?? DateTime.now(),
+        updatedAt = updatedAt ?? DateTime.now();
+
+  double get distanceTraveled => currentOdometer - initialOdometer;
 
   Bike copyWith({
-    String? id,
+    int? id,
     String? name,
     String? make,
     String? model,
@@ -42,7 +47,8 @@ class Bike {
     double? initialOdometer,
     double? currentOdometer,
     String? notes,
-    String? imageUrl,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return Bike(
       id: id ?? this.id,
@@ -57,13 +63,14 @@ class Bike {
       initialOdometer: initialOdometer ?? this.initialOdometer,
       currentOdometer: currentOdometer ?? this.currentOdometer,
       notes: notes ?? this.notes,
-      imageUrl: imageUrl ?? this.imageUrl,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? DateTime.now(),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      if (id != null) 'id': id,
       'name': name,
       'make': make,
       'model': model,
@@ -71,11 +78,12 @@ class Bike {
       'color': color,
       'vin': vin,
       'license_plate': licensePlate,
-      'purchase_date': purchaseDate?.toIso8601String(),
+      'purchase_date': purchaseDate?.millisecondsSinceEpoch,
       'initial_odometer': initialOdometer,
       'current_odometer': currentOdometer,
       'notes': notes,
-      'image_url': imageUrl,
+      'created_at': createdAt.millisecondsSinceEpoch,
+      'updated_at': updatedAt.millisecondsSinceEpoch,
     };
   }
 
@@ -90,16 +98,13 @@ class Bike {
       vin: map['vin'],
       licensePlate: map['license_plate'],
       purchaseDate: map['purchase_date'] != null
-          ? DateTime.parse(map['purchase_date'])
+          ? DateTime.fromMillisecondsSinceEpoch(map['purchase_date'])
           : null,
       initialOdometer: map['initial_odometer'],
       currentOdometer: map['current_odometer'],
       notes: map['notes'],
-      imageUrl: map['image_url'],
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at']),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updated_at']),
     );
   }
-
-  String get fullName => '$year $make $model';
-  
-  double get distanceTraveled => currentOdometer - initialOdometer;
 }

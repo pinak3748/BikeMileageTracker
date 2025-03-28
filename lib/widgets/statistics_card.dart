@@ -4,13 +4,12 @@ import '../utils/constants.dart';
 class StatisticsCard extends StatelessWidget {
   final String title;
   final String value;
-  final String? subtitle;
   final IconData icon;
+  final String? subtitle;
   final Color? backgroundColor;
-  final Color? iconColor;
   final Color? textColor;
+  final Color? iconColor;
   final VoidCallback? onTap;
-  final double elevation;
 
   const StatisticsCard({
     super.key,
@@ -19,42 +18,48 @@ class StatisticsCard extends StatelessWidget {
     required this.icon,
     this.subtitle,
     this.backgroundColor,
-    this.iconColor,
     this.textColor,
+    this.iconColor,
     this.onTap,
-    this.elevation = 1.0,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: backgroundColor ?? AppColors.cardBackground,
-      elevation: elevation,
+      color: backgroundColor ?? AppColors.primary,
+      elevation: AppConstants.cardElevation,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.borderRadius),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppConstants.borderRadius),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
-                    icon,
-                    color: iconColor ?? AppColors.primary,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 8),
                   Text(
                     title,
                     style: TextStyle(
-                      color: textColor ?? AppColors.textLight,
                       fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: textColor ??
+                          (backgroundColor == null
+                              ? Colors.white
+                              : Colors.grey[700]),
                     ),
+                  ),
+                  Icon(
+                    icon,
+                    color: iconColor ??
+                        (backgroundColor == null
+                            ? Colors.white.withOpacity(0.8)
+                            : AppColors.primary),
+                    size: 24,
                   ),
                 ],
               ),
@@ -64,7 +69,10 @@ class StatisticsCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: textColor ?? AppColors.text,
+                  color: textColor ??
+                      (backgroundColor == null
+                          ? Colors.white
+                          : Colors.grey[900]),
                 ),
               ),
               if (subtitle != null) ...[
@@ -73,7 +81,11 @@ class StatisticsCard extends StatelessWidget {
                   subtitle!,
                   style: TextStyle(
                     fontSize: 12,
-                    color: textColor?.withOpacity(0.8) ?? AppColors.textLight,
+                    color: textColor != null
+                        ? textColor!.withOpacity(0.7)
+                        : (backgroundColor == null
+                            ? Colors.white.withOpacity(0.8)
+                            : Colors.grey[600]),
                   ),
                 ),
               ],
