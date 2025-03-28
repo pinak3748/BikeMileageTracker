@@ -1,5 +1,5 @@
 class Bike {
-  final int? id;
+  final String? id;
   final String name;
   final String make;
   final String model;
@@ -35,7 +35,7 @@ class Bike {
   double get distanceTraveled => currentOdometer - initialOdometer;
 
   Bike copyWith({
-    int? id,
+    String? id,
     String? name,
     String? make,
     String? model,

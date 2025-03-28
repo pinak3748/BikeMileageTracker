@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import '../services/database_helper.dart';
-import '../utils/constants.dart';
 import '../models/expense.dart';
 
 class ExpenseProvider with ChangeNotifier {
@@ -66,12 +65,7 @@ class ExpenseProvider with ChangeNotifier {
   // Load expenses for a specific bike
   Future<void> loadExpenses(String bikeId) async {
     try {
-      final expensesData = await _dbHelper.query(
-        AppConstants.expenseTable,
-        where: 'bike_id = ?',
-        whereArgs: [bikeId],
-        orderBy: 'date DESC',
-      );
+      final expensesData = await _dbHelper.getExpenses(bikeId);
       
       _expenses = expensesData
           .map((item) => Expense.fromMap(item))
@@ -91,7 +85,7 @@ class ExpenseProvider with ChangeNotifier {
       final expenseWithId = expense.copyWith(id: _uuid.v4());
       final expenseMap = expenseWithId.toMap();
       
-      await _dbHelper.insert(AppConstants.expenseTable, expenseMap);
+      await _dbHelper.insertExpense(expenseMap);
       
       await loadExpenses(expense.bikeId);
     } catch (e) {
@@ -109,12 +103,7 @@ class ExpenseProvider with ChangeNotifier {
       
       final expenseMap = expense.toMap();
       
-      await _dbHelper.update(
-        AppConstants.expenseTable,
-        expenseMap,
-        where: 'id = ?',
-        whereArgs: [expense.id],
-      );
+      await _dbHelper.updateExpense(expenseMap);
       
       await loadExpenses(expense.bikeId);
     } catch (e) {
@@ -126,11 +115,7 @@ class ExpenseProvider with ChangeNotifier {
   // Delete an expense
   Future<void> deleteExpense(String expenseId, String bikeId) async {
     try {
-      await _dbHelper.delete(
-        AppConstants.expenseTable,
-        where: 'id = ?',
-        whereArgs: [expenseId],
-      );
+      await _dbHelper.deleteExpense(expenseId);
       
       await loadExpenses(bikeId);
     } catch (e) {

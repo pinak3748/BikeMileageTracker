@@ -1,6 +1,6 @@
 class MaintenanceRecord {
-  final int? id;
-  final int bikeId;
+  final String? id;
+  final String bikeId;
   final String type;
   final DateTime date;
   final double odometer;
@@ -31,8 +31,8 @@ class MaintenanceRecord {
         updatedAt = updatedAt ?? DateTime.now();
 
   MaintenanceRecord copyWith({
-    int? id,
-    int? bikeId,
+    String? id,
+    String? bikeId,
     String? type,
     DateTime? date,
     double? odometer,

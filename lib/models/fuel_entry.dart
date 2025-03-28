@@ -1,6 +1,6 @@
 class FuelEntry {
-  final int? id;
-  final int bikeId;
+  final String? id;
+  final String bikeId;
   final DateTime date;
   final double odometer;
   final double volume;
@@ -31,8 +31,8 @@ class FuelEntry {
   double get pricePerLiter => volume > 0 ? cost / volume : 0;
 
   FuelEntry copyWith({
-    int? id,
-    int? bikeId,
+    String? id,
+    String? bikeId,
     DateTime? date,
     double? odometer,
     double? volume,

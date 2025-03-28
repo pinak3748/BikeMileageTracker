@@ -1,6 +1,6 @@
 class Expense {
-  final int? id;
-  final int bikeId;
+  final String? id;
+  final String bikeId;
   final String category;
   final String title;
   final DateTime date;
@@ -27,8 +27,8 @@ class Expense {
         updatedAt = updatedAt ?? DateTime.now();
 
   Expense copyWith({
-    int? id,
-    int? bikeId,
+    String? id,
+    String? bikeId,
     String? category,
     String? title,
     DateTime? date,

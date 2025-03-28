@@ -3,7 +3,6 @@ import 'package:uuid/uuid.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/bike.dart';
 import '../services/database_helper.dart';
-import '../utils/constants.dart';
 
 class BikeProvider with ChangeNotifier {
   final DatabaseHelper _dbHelper = DatabaseHelper();
@@ -22,7 +21,7 @@ class BikeProvider with ChangeNotifier {
 
   Future<void> loadBikes() async {
     try {
-      final bikesData = await _dbHelper.query(AppConstants.bikeTable);
+      final bikesData = await _dbHelper.getBikes();
       _bikes = bikesData.map((item) => Bike.fromMap(item)).toList();
       
       if (_bikes.isNotEmpty) {
@@ -58,7 +57,7 @@ class BikeProvider with ChangeNotifier {
       final bikeWithId = bike.copyWith(id: _uuid.v4());
       final bikeMap = bikeWithId.toMap();
       
-      await _dbHelper.insert(AppConstants.bikeTable, bikeMap);
+      await _dbHelper.insertBike(bikeMap);
       
       // Reload bikes to get the updated list
       await loadBikes();
@@ -85,12 +84,7 @@ class BikeProvider with ChangeNotifier {
       
       final bikeMap = bike.toMap();
       
-      await _dbHelper.update(
-        AppConstants.bikeTable,
-        bikeMap,
-        where: 'id = ?',
-        whereArgs: [bike.id],
-      );
+      await _dbHelper.updateBike(bikeMap);
       
       final index = _bikes.indexWhere((b) => b.id == bike.id);
       if (index != -1) {
@@ -111,11 +105,7 @@ class BikeProvider with ChangeNotifier {
 
   Future<void> deleteBike(String bikeId) async {
     try {
-      await _dbHelper.delete(
-        AppConstants.bikeTable,
-        where: 'id = ?',
-        whereArgs: [bikeId],
-      );
+      await _dbHelper.deleteBike(bikeId);
       
       _bikes.removeWhere((bike) => bike.id == bikeId);
       
@@ -148,6 +138,11 @@ class BikeProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+  
+  // Add setCurrentBike method to fix the error in custom_app_bar.dart
+  Future<void> setCurrentBike(String bikeId) async {
+    return selectBike(bikeId);
+  }
 
   Future<void> updateOdometer(String bikeId, double newOdometer) async {
     try {
@@ -155,12 +150,11 @@ class BikeProvider with ChangeNotifier {
       if (index != -1) {
         final updatedBike = _bikes[index].copyWith(currentOdometer: newOdometer);
         
-        await _dbHelper.update(
-          AppConstants.bikeTable,
-          {'current_odometer': newOdometer},
-          where: 'id = ?',
-          whereArgs: [bikeId],
-        );
+        await _dbHelper.updateBike({
+          'id': bikeId,
+          'current_odometer': newOdometer,
+          'updated_at': DateTime.now().millisecondsSinceEpoch
+        });
         
         _bikes[index] = updatedBike;
         

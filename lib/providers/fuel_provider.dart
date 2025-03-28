@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import '../services/database_helper.dart';
-import '../utils/constants.dart';
 import '../models/fuel_entry.dart';
 
 class FuelProvider with ChangeNotifier {
@@ -22,7 +21,7 @@ class FuelProvider with ChangeNotifier {
   double getTotalFuelCost(String bikeId) {
     return _fuelEntries
         .where((entry) => entry.bikeId == bikeId)
-        .map((entry) => entry.totalCost)
+        .map((entry) => entry.cost)
         .fold(0, (prev, cost) => prev + cost);
   }
   
@@ -30,7 +29,7 @@ class FuelProvider with ChangeNotifier {
   double getTotalFuelVolume(String bikeId) {
     return _fuelEntries
         .where((entry) => entry.bikeId == bikeId)
-        .map((entry) => entry.fuelAmount)
+        .map((entry) => entry.volume)
         .fold(0, (prev, amount) => prev + amount);
   }
   
@@ -48,9 +47,9 @@ class FuelProvider with ChangeNotifier {
     for (int i = 1; i < entries.length; i++) {
       final distance = entries[i].odometer - entries[i - 1].odometer;
       
-      if (distance > 0 && entries[i - 1].fillType == 'Full Fill') {
+      if (distance > 0 && entries[i - 1].isFillup) {
         totalDistance += distance;
-        totalFuel += entries[i - 1].fuelAmount;
+        totalFuel += entries[i - 1].volume;
       }
     }
     
@@ -64,18 +63,13 @@ class FuelProvider with ChangeNotifier {
     if (entries.isEmpty) return 0;
     
     entries.sort((a, b) => b.date.compareTo(a.date));
-    return entries.first.pricePerUnit;
+    return entries.first.pricePerLiter;
   }
   
   // Load fuel entries for a specific bike
   Future<void> loadFuelEntries(String bikeId) async {
     try {
-      final entriesData = await _dbHelper.query(
-        AppConstants.fuelTable,
-        where: 'bike_id = ?',
-        whereArgs: [bikeId],
-        orderBy: 'date DESC',
-      );
+      final entriesData = await _dbHelper.getFuelEntries(bikeId);
       
       _fuelEntries = entriesData
           .map((item) => FuelEntry.fromMap(item))
@@ -95,7 +89,7 @@ class FuelProvider with ChangeNotifier {
       final entryWithId = entry.copyWith(id: _uuid.v4());
       final entryMap = entryWithId.toMap();
       
-      await _dbHelper.insert(AppConstants.fuelTable, entryMap);
+      await _dbHelper.insertFuelEntry(entryMap);
       
       await loadFuelEntries(entry.bikeId);
     } catch (e) {
@@ -113,12 +107,7 @@ class FuelProvider with ChangeNotifier {
       
       final entryMap = entry.toMap();
       
-      await _dbHelper.update(
-        AppConstants.fuelTable,
-        entryMap,
-        where: 'id = ?',
-        whereArgs: [entry.id],
-      );
+      await _dbHelper.updateFuelEntry(entryMap);
       
       await loadFuelEntries(entry.bikeId);
     } catch (e) {
@@ -130,11 +119,7 @@ class FuelProvider with ChangeNotifier {
   // Delete a fuel entry
   Future<void> deleteFuelEntry(String entryId, String bikeId) async {
     try {
-      await _dbHelper.delete(
-        AppConstants.fuelTable,
-        where: 'id = ?',
-        whereArgs: [entryId],
-      );
+      await _dbHelper.deleteFuelEntry(entryId);
       
       await loadFuelEntries(bikeId);
     } catch (e) {
@@ -172,7 +157,7 @@ class FuelProvider with ChangeNotifier {
       final monthLabel = '${entry.date.year}-${entry.date.month.toString().padLeft(2, '0')}';
       
       if (monthlyCosts.containsKey(monthLabel)) {
-        monthlyCosts[monthLabel] = (monthlyCosts[monthLabel] ?? 0) + entry.totalCost;
+        monthlyCosts[monthLabel] = (monthlyCosts[monthLabel] ?? 0) + entry.cost;
       }
     }
     

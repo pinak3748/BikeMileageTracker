@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import '../services/database_helper.dart';
-import '../utils/constants.dart';
 import '../models/maintenance_record.dart';
 
 class MaintenanceProvider with ChangeNotifier {
@@ -26,7 +25,6 @@ class MaintenanceProvider with ChangeNotifier {
     return _maintenanceRecords
         .where((record) => record.bikeId == bikeId)
         .where((record) => record.date.isAfter(thirtyDaysAgo))
-        .where((record) => record.status == 'Completed')
         .length;
   }
   
@@ -36,28 +34,25 @@ class MaintenanceProvider with ChangeNotifier {
     
     return _maintenanceRecords
         .where((record) => record.bikeId == bikeId)
-        .where((record) => record.date.isAfter(now))
-        .where((record) => record.status != 'Completed')
+        .where((record) => record.nextDueDate != null && record.nextDueDate!.isAfter(now))
         .length;
   }
   
   // Get total maintenance cost
   double getTotalMaintenanceCost(String bikeId) {
-    return _maintenanceRecords
-        .where((record) => record.bikeId == bikeId)
-        .map((record) => record.cost)
-        .fold(0, (prev, cost) => prev + cost);
+    double total = 0.0;
+    for (var record in _maintenanceRecords.where((r) => r.bikeId == bikeId)) {
+      if (record.cost != null) {
+        total += record.cost!;
+      }
+    }
+    return total;
   }
   
   // Load maintenance records for a specific bike
   Future<void> loadMaintenanceRecords(String bikeId) async {
     try {
-      final recordsData = await _dbHelper.query(
-        AppConstants.maintenanceTable,
-        where: 'bike_id = ?',
-        whereArgs: [bikeId],
-        orderBy: 'date DESC',
-      );
+      final recordsData = await _dbHelper.getMaintenanceRecords(bikeId);
       
       _maintenanceRecords = recordsData
           .map((item) => MaintenanceRecord.fromMap(item))
@@ -77,7 +72,7 @@ class MaintenanceProvider with ChangeNotifier {
       final recordWithId = record.copyWith(id: _uuid.v4());
       final recordMap = recordWithId.toMap();
       
-      await _dbHelper.insert(AppConstants.maintenanceTable, recordMap);
+      await _dbHelper.insertMaintenanceRecord(recordMap);
       
       await loadMaintenanceRecords(record.bikeId);
     } catch (e) {
@@ -95,12 +90,7 @@ class MaintenanceProvider with ChangeNotifier {
       
       final recordMap = record.toMap();
       
-      await _dbHelper.update(
-        AppConstants.maintenanceTable,
-        recordMap,
-        where: 'id = ?',
-        whereArgs: [record.id],
-      );
+      await _dbHelper.updateMaintenanceRecord(recordMap);
       
       await loadMaintenanceRecords(record.bikeId);
     } catch (e) {
@@ -112,11 +102,7 @@ class MaintenanceProvider with ChangeNotifier {
   // Delete a maintenance record
   Future<void> deleteMaintenanceRecord(String recordId, String bikeId) async {
     try {
-      await _dbHelper.delete(
-        AppConstants.maintenanceTable,
-        where: 'id = ?',
-        whereArgs: [recordId],
-      );
+      await _dbHelper.deleteMaintenanceRecord(recordId);
       
       await loadMaintenanceRecords(bikeId);
     } catch (e) {
@@ -129,23 +115,26 @@ class MaintenanceProvider with ChangeNotifier {
   List<MaintenanceRecord> getMaintenanceByType(String bikeId, String type) {
     return _maintenanceRecords
         .where((record) => record.bikeId == bikeId)
-        .where((record) => record.maintenanceType == type)
+        .where((record) => record.type == type)
         .toList();
   }
   
-  // Get completed maintenance
+  // Get completed maintenance (records that have already happened)
   List<MaintenanceRecord> getCompletedMaintenance(String bikeId) {
+    final now = DateTime.now();
     return _maintenanceRecords
         .where((record) => record.bikeId == bikeId)
-        .where((record) => record.status == 'Completed')
+        .where((record) => record.date.isBefore(now) || record.date.isAtSameMomentAs(now))
         .toList();
   }
   
-  // Get scheduled maintenance
+  // Get scheduled maintenance (records with future dates)
   List<MaintenanceRecord> getScheduledMaintenance(String bikeId) {
+    final now = DateTime.now();
     return _maintenanceRecords
         .where((record) => record.bikeId == bikeId)
-        .where((record) => record.status != 'Completed')
+        .where((record) => record.date.isAfter(now) || 
+                           (record.nextDueDate != null && record.nextDueDate!.isAfter(now)))
         .toList();
   }
 }

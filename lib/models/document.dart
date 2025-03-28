@@ -1,6 +1,6 @@
 class Document {
-  final int? id;
-  final int bikeId;
+  final String? id;
+  final String bikeId;
   final String title;
   final String documentType;
   final DateTime date;
@@ -20,8 +20,8 @@ class Document {
   });
 
   Document copyWith({
-    int? id,
-    int? bikeId,
+    String? id,
+    String? bikeId,
     String? title,
     String? documentType,
     DateTime? date,
@@ -43,7 +43,7 @@ class Document {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      if (id != null) 'id': id,
       'bike_id': bikeId,
       'title': title,
       'document_type': documentType,

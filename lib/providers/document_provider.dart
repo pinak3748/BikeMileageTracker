@@ -15,12 +15,13 @@ class DocumentProvider with ChangeNotifier {
   List<Document> get documents => [..._documents];
   bool get isLoading => _isLoading;
   
-  Future<void> loadDocuments(int bikeId) async {
+  Future<void> loadDocuments(String bikeId) async {
     _isLoading = true;
     notifyListeners();
     
     try {
-      _documents = await _dbHelper.getDocumentsForBike(bikeId);
+      final documentMaps = await _dbHelper.getDocuments(bikeId);
+      _documents = documentMaps.map((map) => Document.fromMap(map)).toList();
     } catch (error) {
       debugPrint('Error loading documents: $error');
     } finally {
@@ -29,9 +30,10 @@ class DocumentProvider with ChangeNotifier {
     }
   }
   
-  Future<Document?> getDocument(int id) async {
+  Future<Document?> getDocument(String id) async {
     try {
-      return await _dbHelper.getDocument(id);
+      final document = _documents.firstWhere((doc) => doc.id == id);
+      return document;
     } catch (error) {
       debugPrint('Error getting document: $error');
       return null;
@@ -52,7 +54,7 @@ class DocumentProvider with ChangeNotifier {
       final documentWithPath = document.copyWith(filePath: savedFile.path);
       
       // Insert to database
-      final id = await _dbHelper.insertDocument(documentWithPath);
+      final id = await _dbHelper.insertDocument(documentWithPath.toMap());
       final newDocument = documentWithPath.copyWith(id: id);
       
       // Update local list
@@ -94,7 +96,7 @@ class DocumentProvider with ChangeNotifier {
       }
       
       // Update in database
-      await _dbHelper.updateDocument(updatedDocument);
+      await _dbHelper.updateDocument(updatedDocument.toMap());
       
       // Update in local list
       final index = _documents.indexWhere((d) => d.id == document.id);
@@ -113,13 +115,13 @@ class DocumentProvider with ChangeNotifier {
     }
   }
   
-  Future<bool> deleteDocument(int id) async {
+  Future<bool> deleteDocument(String id) async {
     _isLoading = true;
     notifyListeners();
     
     try {
       // Get document to delete its file
-      final document = await _dbHelper.getDocument(id);
+      final document = await getDocument(id);
       if (document != null) {
         // Delete the file
         final file = File(document.filePath);
@@ -145,9 +147,10 @@ class DocumentProvider with ChangeNotifier {
     }
   }
   
-  Future<List<Document>> getDocumentsByType(int bikeId, String documentType) async {
+  List<Document> getDocumentsByType(String bikeId, String documentType) {
     try {
-      return await _dbHelper.getDocumentsForBikeByType(bikeId, documentType);
+      return _documents.where((doc) => 
+        doc.bikeId == bikeId && doc.documentType == documentType).toList();
     } catch (error) {
       debugPrint('Error getting documents by type: $error');
       return [];
