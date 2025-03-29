@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../models/fuel_entry.dart';
+import '../../models/fill_type.dart';
 import '../../providers/bike_provider.dart';
 import '../../providers/fuel_provider.dart';
 import '../../utils/constants.dart';
@@ -185,7 +186,7 @@ class _FuelEntryScreenState extends State<FuelEntryScreen> {
           notes: notes,
         );
 
-        await fuelProvider.addFuelEntry(newEntry, bikeProvider.currentBike!);
+        await fuelProvider.addFuelEntry(newEntry);
       }
 
       if (mounted) {
@@ -453,7 +454,7 @@ class _FuelEntryScreenState extends State<FuelEntryScreen> {
 
               try {
                 final fuelProvider = Provider.of<FuelProvider>(context, listen: false);
-                await fuelProvider.deleteFuelEntry(widget.entry!.id!);
+                await fuelProvider.deleteFuelEntry(widget.entry!.id!, widget.entry!.bikeId);
                 if (mounted) {
                   Navigator.of(context).pop();
                 }

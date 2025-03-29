@@ -1,0 +1,1 @@
+enum FillType { full, partial }

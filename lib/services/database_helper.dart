@@ -19,9 +19,27 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), AppConfig.dbName);
-    return await openDatabase(path, version: 1, onCreate: _onCreate);
+    return await openDatabase(
+      path, 
+      version: 2, 
+      onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
+    );
   }
 
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      // Add fill_type column to fuel_entries table in version 2
+      await db.execute('ALTER TABLE fuel_entries ADD COLUMN fill_type TEXT');
+      
+      // Update existing records to set fill_type based on is_fillup
+      await db.execute('''
+        UPDATE fuel_entries 
+        SET fill_type = CASE WHEN is_fillup = 1 THEN 'full' ELSE 'partial' END
+      ''');
+    }
+  }
+  
   Future<void> _onCreate(Database db, int version) async {
     // Create bikes table
     await db.execute('''
@@ -58,6 +76,7 @@ class DatabaseHelper {
         notes TEXT,
         created_at INTEGER NOT NULL,
         updated_at INTEGER NOT NULL,
+        fill_type TEXT,
         FOREIGN KEY (bike_id) REFERENCES bikes (id) ON DELETE CASCADE
       )
     ''');
