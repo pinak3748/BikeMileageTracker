@@ -40,11 +40,11 @@ class ExpenseScreen extends StatelessWidget {
           children: [
             Container(
               color: Colors.white,
-              child: const TabBar(
-                labelColor: AppColors.primary,
+              child: TabBar(
+                labelColor: AppColors.current.primary,
                 unselectedLabelColor: Colors.grey,
-                indicatorColor: AppColors.primary,
-                tabs: [
+                indicatorColor: AppColors.current.primary,
+                tabs: const [
                   Tab(text: 'Expenses'),
                   Tab(text: 'Analysis'),
                 ],
@@ -69,7 +69,7 @@ class ExpenseScreen extends StatelessWidget {
             ),
           );
         },
-        backgroundColor: AppColors.error,
+        backgroundColor: AppColors.current.error,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );

@@ -336,10 +336,10 @@ class _BikeProfileScreenState extends State<BikeProfileScreen> {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: AppColors.primary,
+          color: AppColors.current.primary,
         ),
       ),
     );

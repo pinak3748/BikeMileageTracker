@@ -132,10 +132,10 @@ class MoreScreen extends StatelessWidget {
                       'assets/icons/app_icon.png',
                       width: 48,
                       height: 48,
-                      errorBuilder: (context, error, stackTrace) => const Icon(
+                      errorBuilder: (context, error, stackTrace) => Icon(
                         Icons.motorcycle,
                         size: 48,
-                        color: AppColors.primary,
+                        color: AppColors.current.primary,
                       ),
                     ),
                     children: [
@@ -161,8 +161,8 @@ class MoreScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
           child: Text(
             title,
-            style: const TextStyle(
-              color: AppColors.primary,
+            style: TextStyle(
+              color: AppColors.current.primary,
               fontWeight: FontWeight.bold,
               fontSize: 18,
             ),
@@ -183,8 +183,8 @@ class MoreScreen extends StatelessWidget {
   ) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundColor: AppColors.primary.withOpacity(0.1),
-        child: Icon(icon, color: AppColors.primary),
+        backgroundColor: AppColors.current.primary.withOpacity(0.1),
+        child: Icon(icon, color: AppColors.current.primary),
       ),
       title: Text(title),
       trailing: const Icon(Icons.chevron_right),

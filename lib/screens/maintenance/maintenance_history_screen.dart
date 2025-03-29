@@ -38,7 +38,7 @@ class _MaintenanceHistoryScreenState extends State<MaintenanceHistoryScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error loading maintenance data: $error'),
-            backgroundColor: AppColors.danger,
+            backgroundColor: AppColors.current.danger,
           ),
         );
       } finally {
@@ -84,7 +84,7 @@ class _MaintenanceHistoryScreenState extends State<MaintenanceHistoryScreen> {
         ],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator(color: AppColors.accent))
+          ? Center(child: CircularProgressIndicator(color: AppColors.current.accent))
           : _buildMaintenanceList(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -177,7 +177,7 @@ class _MaintenanceHistoryScreenState extends State<MaintenanceHistoryScreen> {
                         Text(
                           DateFormatter.formatDate(entry.date),
                           style: TextStyle(
-                            color: AppColors.textLight,
+                            color: AppColors.current.textLight,
                             fontSize: 14,
                           ),
                         ),
@@ -192,13 +192,13 @@ class _MaintenanceHistoryScreenState extends State<MaintenanceHistoryScreen> {
                             Icon(
                               Icons.build,
                               size: 16,
-                              color: AppColors.textLight,
+                              color: AppColors.current.textLight,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               entry.maintenanceType,
                               style: TextStyle(
-                                color: AppColors.textLight,
+                                color: AppColors.current.textLight,
                                 fontSize: 14,
                               ),
                             ),
@@ -208,7 +208,7 @@ class _MaintenanceHistoryScreenState extends State<MaintenanceHistoryScreen> {
                           DateFormatter.formatCurrency(entry.cost),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: AppColors.primary,
+                            color: AppColors.current.primary,
                           ),
                         ),
                       ],
@@ -219,13 +219,13 @@ class _MaintenanceHistoryScreenState extends State<MaintenanceHistoryScreen> {
                         Icon(
                           Icons.speed,
                           size: 16,
-                          color: AppColors.textLight,
+                          color: AppColors.current.textLight,
                         ),
                         const SizedBox(width: 4),
                         Text(
                           DateFormatter.formatDistance(entry.odometer),
                           style: TextStyle(
-                            color: AppColors.textLight,
+                            color: AppColors.current.textLight,
                             fontSize: 14,
                           ),
                         ),
@@ -233,7 +233,7 @@ class _MaintenanceHistoryScreenState extends State<MaintenanceHistoryScreen> {
                     ),
                     if (entry.partsReplaced != null && entry.partsReplaced!.isNotEmpty) ...[
                       const SizedBox(height: 12),
-                      Divider(color: AppColors.border),
+                      Divider(color: AppColors.current.border),
                       const SizedBox(height: 8),
                       Text(
                         'Parts: ${entry.partsReplaced}',
@@ -258,7 +258,7 @@ class _MaintenanceHistoryScreenState extends State<MaintenanceHistoryScreen> {
                         style: TextStyle(
                           fontSize: 14,
                           fontStyle: FontStyle.italic,
-                          color: AppColors.textLight,
+                          color: AppColors.current.textLight,
                         ),
                       ),
                     ],

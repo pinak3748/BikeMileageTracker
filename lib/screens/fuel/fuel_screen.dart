@@ -54,7 +54,7 @@ class FuelScreen extends StatelessWidget {
             ),
           );
         },
-        backgroundColor: AppColors.info,
+        backgroundColor: AppColors.current.info,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );

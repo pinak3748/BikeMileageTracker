@@ -19,7 +19,7 @@ class FuelChart extends StatelessWidget {
       return Center(
         child: Text(
           'No data available',
-          style: TextStyle(color: AppColors.textLight),
+          style: TextStyle(color: AppColors.current.textLight),
         ),
       );
     }
@@ -67,7 +67,7 @@ class FuelChart extends StatelessWidget {
                             child: Text(
                               DateFormatter.formatShortDate(date),
                               style: TextStyle(
-                                color: AppColors.textLight,
+                                color: AppColors.current.textLight,
                                 fontSize: 10,
                               ),
                             ),
@@ -85,7 +85,7 @@ class FuelChart extends StatelessWidget {
                         return Text(
                           value.toStringAsFixed(1),
                           style: TextStyle(
-                            color: AppColors.textLight,
+                            color: AppColors.current.textLight,
                             fontSize: 10,
                           ),
                         );
@@ -102,7 +102,7 @@ class FuelChart extends StatelessWidget {
                 ),
                 borderData: FlBorderData(
                   show: true,
-                  border: Border.all(color: AppColors.border, width: 1),
+                  border: Border.all(color: AppColors.current.border, width: 1),
                 ),
                 minX: 0,
                 maxX: data.length.toDouble() - 1,
@@ -117,7 +117,7 @@ class FuelChart extends StatelessWidget {
                       );
                     }),
                     isCurved: true,
-                    color: AppColors.accent,
+                    color: AppColors.current.accent,
                     barWidth: 3,
                     isStrokeCapRound: true,
                     dotData: FlDotData(
@@ -125,7 +125,7 @@ class FuelChart extends StatelessWidget {
                       getDotPainter: (spot, percent, barData, index) {
                         return FlDotCirclePainter(
                           radius: 4,
-                          color: AppColors.accent,
+                          color: AppColors.current.accent,
                           strokeWidth: 1,
                           strokeColor: Colors.white,
                         );
@@ -133,7 +133,7 @@ class FuelChart extends StatelessWidget {
                     ),
                     belowBarData: BarAreaData(
                       show: true,
-                      color: AppColors.accent.withOpacity(0.2),
+                      color: AppColors.current.accent.withOpacity(0.2),
                     ),
                   ),
                 ],

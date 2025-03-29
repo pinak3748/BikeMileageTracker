@@ -26,7 +26,7 @@ class StatisticsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: backgroundColor ?? AppColors.primary,
+      color: backgroundColor ?? AppColors.current.primary,
       elevation: AppConstants.cardElevation,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppConstants.borderRadius),
@@ -58,7 +58,7 @@ class StatisticsCard extends StatelessWidget {
                     color: iconColor ??
                         (backgroundColor == null
                             ? Colors.white.withOpacity(0.8)
-                            : AppColors.primary),
+                            : AppColors.current.primary),
                     size: 24,
                   ),
                 ],

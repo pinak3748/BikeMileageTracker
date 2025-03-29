@@ -19,7 +19,7 @@ class ExpenseChart extends StatelessWidget {
       return Center(
         child: Text(
           'No data available',
-          style: TextStyle(color: AppColors.textLight),
+          style: TextStyle(color: AppColors.current.textLight),
         ),
       );
     }
@@ -76,7 +76,7 @@ class ExpenseChart extends StatelessWidget {
                             child: Text(
                               monthOnly,
                               style: TextStyle(
-                                color: AppColors.textLight,
+                                color: AppColors.current.textLight,
                                 fontSize: 12,
                               ),
                             ),
@@ -94,7 +94,7 @@ class ExpenseChart extends StatelessWidget {
                         return Text(
                           '\$${value.toInt()}',
                           style: TextStyle(
-                            color: AppColors.textLight,
+                            color: AppColors.current.textLight,
                             fontSize: 10,
                           ),
                         );
@@ -111,7 +111,7 @@ class ExpenseChart extends StatelessWidget {
                 ),
                 borderData: FlBorderData(
                   show: true,
-                  border: Border.all(color: AppColors.border, width: 1),
+                  border: Border.all(color: AppColors.current.border, width: 1),
                 ),
                 gridData: FlGridData(
                   show: true,
@@ -125,7 +125,7 @@ class ExpenseChart extends StatelessWidget {
                     barRods: [
                       BarChartRodData(
                         toY: (data[index]['total'] as double),
-                        color: AppColors.accent,
+                        color: AppColors.current.accent,
                         width: 20,
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(6),
@@ -162,18 +162,18 @@ class ExpensePieChart extends StatelessWidget {
       return Center(
         child: Text(
           'No data available',
-          style: TextStyle(color: AppColors.textLight),
+          style: TextStyle(color: AppColors.current.textLight),
         ),
       );
     }
     
     // Generate colors for each category
     final List<Color> categoryColors = [
-      AppColors.primary,
-      AppColors.accent,
-      AppColors.success,
-      AppColors.warning,
-      AppColors.danger,
+      AppColors.current.primary,
+      AppColors.current.accent,
+      AppColors.current.success,
+      AppColors.current.warning,
+      AppColors.current.danger,
       Colors.purple,
       Colors.orange,
       Colors.teal,

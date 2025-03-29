@@ -4,6 +4,48 @@ modules = ["flutter"]
 channel = "stable-24_05"
 
 [workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Flutter Update Dependencies"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Flutter App Linux"
+
+[[workflows.workflow]]
+name = "Flutter Update Dependencies"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd . && flutter pub get"
+
+[[workflows.workflow]]
+name = "Flutter App Linux"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd . && flutter run -d linux"
 
 [deployment]
 run = ["sh", "-c", "flutter run -d web-server --web-port 5000 --web-hostname 0.0.0.0"]

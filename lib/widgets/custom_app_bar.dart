@@ -24,7 +24,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(title),
-      backgroundColor: AppColors.primary,
+      backgroundColor: AppColors.current.primary,
       elevation: 0,
       actions: [
         if (showBikeSelector) _buildBikeSelector(context),
@@ -60,19 +60,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               value: bike,
               child: Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.motorcycle,
-                    color: AppColors.primary,
+                    color: AppColors.current.primary,
                     size: 20,
                   ),
                   const SizedBox(width: 8),
                   Text(bike.name),
                   if (bikeProvider.currentBike?.id == bike.id)
-                    const Padding(
-                      padding: EdgeInsets.only(left: 8.0),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
                       child: Icon(
                         Icons.check,
-                        color: AppColors.primary,
+                        color: AppColors.current.primary,
                         size: 16,
                       ),
                     ),

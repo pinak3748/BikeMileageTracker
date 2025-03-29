@@ -46,7 +46,7 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> with SingleTicker
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error loading fuel data: $error'),
-            backgroundColor: AppColors.danger,
+            backgroundColor: AppColors.current.danger,
           ),
         );
       } finally {
@@ -73,7 +73,7 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> with SingleTicker
         ),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator(color: AppColors.accent))
+          ? Center(child: CircularProgressIndicator(color: AppColors.current.accent))
           : TabBarView(
               controller: _tabController,
               children: [
@@ -151,7 +151,7 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> with SingleTicker
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: AppColors.primary,
+                            color: AppColors.current.primary,
                           ),
                         ),
                       ],
@@ -167,7 +167,7 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> with SingleTicker
                               'Odometer',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: AppColors.textLight,
+                                color: AppColors.current.textLight,
                               ),
                             ),
                             Text(
@@ -183,7 +183,7 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> with SingleTicker
                               'Quantity',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: AppColors.textLight,
+                                color: AppColors.current.textLight,
                               ),
                             ),
                             Text(
@@ -199,7 +199,7 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> with SingleTicker
                               'Price/L',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: AppColors.textLight,
+                                color: AppColors.current.textLight,
                               ),
                             ),
                             Text(
@@ -219,12 +219,12 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> with SingleTicker
                             entry.fillType == FillType.full ? 'Full Tank' : 'Partial',
                           ),
                           backgroundColor: entry.fillType == FillType.full
-                              ? AppColors.accent.withOpacity(0.2)
-                              : AppColors.textLight.withOpacity(0.2),
+                              ? AppColors.current.accent.withOpacity(0.2)
+                              : AppColors.current.textLight.withOpacity(0.2),
                           labelStyle: TextStyle(
                             color: entry.fillType == FillType.full
-                                ? AppColors.accent
-                                : AppColors.textLight,
+                                ? AppColors.current.accent
+                                : AppColors.current.textLight,
                           ),
                         ),
                         if (entry.efficiency != null)
@@ -233,14 +233,14 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> with SingleTicker
                               Icon(
                                 Icons.speed,
                                 size: 16,
-                                color: AppColors.accent,
+                                color: AppColors.current.accent,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 DateFormatter.formatEfficiency(entry.efficiency!),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.accent,
+                                  color: AppColors.current.accent,
                                 ),
                               ),
                             ],
@@ -249,7 +249,7 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> with SingleTicker
                     ),
                     if (entry.fuelType != null || entry.station != null) ...[
                       const SizedBox(height: 8),
-                      Divider(color: AppColors.border),
+                      Divider(color: AppColors.current.border),
                       const SizedBox(height: 8),
                       Row(
                         children: [
@@ -257,13 +257,13 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> with SingleTicker
                             Icon(
                               Icons.local_gas_station,
                               size: 14,
-                              color: AppColors.textLight,
+                              color: AppColors.current.textLight,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               entry.fuelType!,
                               style: TextStyle(
-                                color: AppColors.textLight,
+                                color: AppColors.current.textLight,
                                 fontSize: 12,
                               ),
                             ),
@@ -271,20 +271,20 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> with SingleTicker
                           if (entry.fuelType != null && entry.station != null) ...[
                             Text(
                               ' • ',
-                              style: TextStyle(color: AppColors.textLight),
+                              style: TextStyle(color: AppColors.current.textLight),
                             ),
                           ],
                           if (entry.station != null) ...[
                             Icon(
                               Icons.location_on,
                               size: 14,
-                              color: AppColors.textLight,
+                              color: AppColors.current.textLight,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               entry.station!,
                               style: TextStyle(
-                                color: AppColors.textLight,
+                                color: AppColors.current.textLight,
                                 fontSize: 12,
                               ),
                             ),
@@ -299,7 +299,7 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> with SingleTicker
                         style: TextStyle(
                           fontSize: 12,
                           fontStyle: FontStyle.italic,
-                          color: AppColors.textLight,
+                          color: AppColors.current.textLight,
                         ),
                       ),
                     ],
@@ -330,14 +330,14 @@ class _FuelHistoryScreenState extends State<FuelHistoryScreen> with SingleTicker
       future: fuelProvider.getEfficiencyTrend(bikeProvider.currentBike!.id!),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator(color: AppColors.accent));
+          return Center(child: CircularProgressIndicator(color: AppColors.current.accent));
         }
 
         if (snapshot.hasError) {
           return Center(
             child: Text(
               'Error loading chart data: ${snapshot.error}',
-              style: TextStyle(color: AppColors.danger),
+              style: TextStyle(color: AppColors.current.danger),
             ),
           );
         }

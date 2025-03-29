@@ -53,7 +53,7 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> with Single
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error loading expense data: $error'),
-            backgroundColor: AppColors.danger,
+            backgroundColor: AppColors.current.danger,
           ),
         );
       } finally {
@@ -106,7 +106,7 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> with Single
         ],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator(color: AppColors.accent))
+          ? Center(child: CircularProgressIndicator(color: AppColors.current.accent))
           : TabBarView(
               controller: _tabController,
               children: [
@@ -208,7 +208,7 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> with Single
                           DateFormatter.formatCurrency(expense.amount),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: AppColors.primary,
+                            color: AppColors.current.primary,
                           ),
                         ),
                       ],
@@ -222,13 +222,13 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> with Single
                             Icon(
                               Icons.calendar_today,
                               size: 14,
-                              color: AppColors.textLight,
+                              color: AppColors.current.textLight,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               DateFormatter.formatDate(expense.date),
                               style: TextStyle(
-                                color: AppColors.textLight,
+                                color: AppColors.current.textLight,
                                 fontSize: 14,
                               ),
                             ),
@@ -240,13 +240,13 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> with Single
                               Icon(
                                 Icons.speed,
                                 size: 14,
-                                color: AppColors.textLight,
+                                color: AppColors.current.textLight,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 DateFormatter.formatDistance(expense.odometer!),
                                 style: TextStyle(
-                                  color: AppColors.textLight,
+                                  color: AppColors.current.textLight,
                                   fontSize: 14,
                                 ),
                               ),
@@ -266,14 +266,14 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> with Single
                     ),
                     if (expense.notes != null && expense.notes!.isNotEmpty) ...[
                       const SizedBox(height: 8),
-                      Divider(color: AppColors.border),
+                      Divider(color: AppColors.current.border),
                       const SizedBox(height: 8),
                       Text(
                         expense.notes!,
                         style: TextStyle(
                           fontSize: 14,
                           fontStyle: FontStyle.italic,
-                          color: AppColors.textLight,
+                          color: AppColors.current.textLight,
                         ),
                       ),
                     ],
@@ -307,14 +307,14 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> with Single
       ]),
       builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator(color: AppColors.accent));
+          return Center(child: CircularProgressIndicator(color: AppColors.current.accent));
         }
 
         if (snapshot.hasError) {
           return Center(
             child: Text(
               'Error loading chart data: ${snapshot.error}',
-              style: TextStyle(color: AppColors.danger),
+              style: TextStyle(color: AppColors.current.danger),
             ),
           );
         }
@@ -347,7 +347,7 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> with Single
                 : Center(
                     child: Text(
                       'Not enough data for monthly chart',
-                      style: TextStyle(color: AppColors.textLight),
+                      style: TextStyle(color: AppColors.current.textLight),
                     ),
                   ),
             ),
@@ -365,11 +365,12 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> with Single
   }
 
   Color _getCategoryColor(String category) {
+    final colors = AppColors.current;
     switch (category) {
       case 'Fuel':
-        return AppColors.accent;
+        return colors.accent;
       case 'Maintenance':
-        return AppColors.warning;
+        return colors.warning;
       case 'Insurance':
         return Colors.purple;
       case 'Registration':
@@ -379,7 +380,7 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> with Single
       case 'Modifications':
         return Colors.indigo;
       default:
-        return AppColors.primary;
+        return colors.primary;
     }
   }
 }

@@ -19,7 +19,7 @@ class AnalyticsScreen extends StatelessWidget {
             Icon(
               Icons.analytics,
               size: 80,
-              color: AppColors.primary.withOpacity(0.5),
+              color: AppColors.current.primary.withOpacity(0.5),
             ),
             const SizedBox(height: 16),
             const Text(

@@ -40,11 +40,11 @@ class MaintenanceScreen extends StatelessWidget {
           children: [
             Container(
               color: Colors.white,
-              child: const TabBar(
-                labelColor: AppColors.primary,
+              child: TabBar(
+                labelColor: AppColors.current.primary,
                 unselectedLabelColor: Colors.grey,
-                indicatorColor: AppColors.primary,
-                tabs: [
+                indicatorColor: AppColors.current.primary,
+                tabs: const [
                   Tab(text: 'Upcoming'),
                   Tab(text: 'History'),
                   Tab(text: 'Schedule'),
@@ -71,7 +71,7 @@ class MaintenanceScreen extends StatelessWidget {
             ),
           );
         },
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.current.primary,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );

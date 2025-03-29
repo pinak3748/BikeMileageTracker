@@ -46,7 +46,7 @@ class _DocumentViewScreenState extends State<DocumentViewScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error checking file: $error'),
-          backgroundColor: AppColors.danger,
+          backgroundColor: AppColors.current.danger,
         ),
       );
     } finally {
@@ -75,7 +75,7 @@ class _DocumentViewScreenState extends State<DocumentViewScreen> {
             onPressed: () => Navigator.of(ctx).pop(true),
             child: Text(
               'Delete',
-              style: TextStyle(color: AppColors.danger),
+              style: TextStyle(color: AppColors.current.danger),
             ),
           ),
         ],
@@ -96,7 +96,7 @@ class _DocumentViewScreenState extends State<DocumentViewScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('Document deleted successfully'),
-            backgroundColor: AppColors.success,
+            backgroundColor: AppColors.current.success,
           ),
         );
         Navigator.of(context).pop();
@@ -106,7 +106,7 @@ class _DocumentViewScreenState extends State<DocumentViewScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error deleting document: $error'),
-            backgroundColor: AppColors.danger,
+            backgroundColor: AppColors.current.danger,
           ),
         );
       }
@@ -132,7 +132,7 @@ class _DocumentViewScreenState extends State<DocumentViewScreen> {
         ],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator(color: AppColors.accent))
+          ? Center(child: CircularProgressIndicator(color: AppColors.current.accent))
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -166,17 +166,17 @@ class _DocumentViewScreenState extends State<DocumentViewScreen> {
                               if (widget.document.isExpired)
                                 Chip(
                                   label: const Text('Expired'),
-                                  backgroundColor: AppColors.danger.withOpacity(0.2),
+                                  backgroundColor: AppColors.current.danger.withOpacity(0.2),
                                   labelStyle: TextStyle(
-                                    color: AppColors.danger,
+                                    color: AppColors.current.danger,
                                   ),
                                 ),
                               if (widget.document.isExpiringSoon && !widget.document.isExpired)
                                 Chip(
                                   label: const Text('Expiring Soon'),
-                                  backgroundColor: AppColors.warning.withOpacity(0.2),
+                                  backgroundColor: AppColors.current.warning.withOpacity(0.2),
                                   labelStyle: TextStyle(
-                                    color: AppColors.warning,
+                                    color: AppColors.current.warning,
                                   ),
                                 ),
                             ],
@@ -214,9 +214,9 @@ class _DocumentViewScreenState extends State<DocumentViewScreen> {
                               DateFormatter.formatDate(widget.document.expiryDate!),
                               Icons.event_busy,
                               color: widget.document.isExpired
-                                  ? AppColors.danger
+                                  ? AppColors.current.danger
                                   : widget.document.isExpiringSoon
-                                      ? AppColors.warning
+                                      ? AppColors.current.warning
                                       : null,
                             ),
                           if (widget.document.expiryDate != null) ...[
@@ -254,7 +254,7 @@ class _DocumentViewScreenState extends State<DocumentViewScreen> {
                             'File Status',
                             _fileExists ? 'Available' : 'Missing',
                             _fileExists ? Icons.check_circle : Icons.error,
-                            color: _fileExists ? AppColors.success : AppColors.danger,
+                            color: _fileExists ? AppColors.current.success : AppColors.current.danger,
                           ),
                           if (_fileExists) ...[
                             const SizedBox(height: 16),
@@ -314,14 +314,14 @@ class _DocumentViewScreenState extends State<DocumentViewScreen> {
           Icon(
             icon,
             size: 20,
-            color: color ?? AppColors.textLight,
+            color: color ?? AppColors.current.textLight,
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Text(
               label,
               style: TextStyle(
-                color: AppColors.textLight,
+                color: AppColors.current.textLight,
               ),
             ),
           ),
@@ -346,13 +346,13 @@ class _DocumentViewScreenState extends State<DocumentViewScreen> {
     String statusText;
     
     if (daysLeft < 0) {
-      statusColor = AppColors.danger;
+      statusColor = AppColors.current.danger;
       statusText = 'Expired ${-daysLeft} days ago';
     } else if (daysLeft <= 30) {
-      statusColor = AppColors.warning;
+      statusColor = AppColors.current.warning;
       statusText = 'Expires in $daysLeft days';
     } else {
-      statusColor = AppColors.success;
+      statusColor = AppColors.current.success;
       statusText = 'Expires in $daysLeft days';
     }
 
@@ -428,7 +428,7 @@ class _DocumentViewScreenState extends State<DocumentViewScreen> {
       case 'Purchase Receipt':
         return Colors.teal;
       default:
-        return AppColors.primary;
+        return AppColors.current.primary;
     }
   }
 }

@@ -195,7 +195,7 @@ class _FuelEntryScreenState extends State<FuelEntryScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error saving fuel entry: $error'),
-          backgroundColor: AppColors.danger,
+          backgroundColor: AppColors.current.danger,
         ),
       );
     } finally {
@@ -221,7 +221,7 @@ class _FuelEntryScreenState extends State<FuelEntryScreen> {
         ],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator(color: AppColors.accent))
+          ? Center(child: CircularProgressIndicator(color: AppColors.current.accent))
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Form(
@@ -461,7 +461,7 @@ class _FuelEntryScreenState extends State<FuelEntryScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Error deleting fuel entry: $error'),
-                    backgroundColor: AppColors.danger,
+                    backgroundColor: AppColors.current.danger,
                   ),
                 );
               } finally {
@@ -474,7 +474,7 @@ class _FuelEntryScreenState extends State<FuelEntryScreen> {
             },
             child: Text(
               'Delete',
-              style: TextStyle(color: AppColors.danger),
+              style: TextStyle(color: AppColors.current.danger),
             ),
           ),
         ],

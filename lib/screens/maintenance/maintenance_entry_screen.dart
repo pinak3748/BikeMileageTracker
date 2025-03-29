@@ -129,7 +129,7 @@ class _MaintenanceEntryScreenState extends State<MaintenanceEntryScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error picking image: $e'),
-          backgroundColor: AppColors.danger,
+          backgroundColor: AppColors.current.danger,
         ),
       );
     }
@@ -207,7 +207,7 @@ class _MaintenanceEntryScreenState extends State<MaintenanceEntryScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error saving maintenance: $error'),
-          backgroundColor: AppColors.danger,
+          backgroundColor: AppColors.current.danger,
         ),
       );
     } finally {
@@ -240,7 +240,7 @@ class _MaintenanceEntryScreenState extends State<MaintenanceEntryScreen> {
         ],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator(color: AppColors.accent))
+          ? Center(child: CircularProgressIndicator(color: AppColors.current.accent))
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Form(
@@ -512,7 +512,7 @@ class _MaintenanceEntryScreenState extends State<MaintenanceEntryScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Error deleting maintenance: $error'),
-                    backgroundColor: AppColors.danger,
+                    backgroundColor: AppColors.current.danger,
                   ),
                 );
               } finally {
@@ -525,7 +525,7 @@ class _MaintenanceEntryScreenState extends State<MaintenanceEntryScreen> {
             },
             child: Text(
               'Delete',
-              style: TextStyle(color: AppColors.danger),
+              style: TextStyle(color: AppColors.current.danger),
             ),
           ),
         ],

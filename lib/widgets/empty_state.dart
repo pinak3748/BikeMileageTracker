@@ -7,7 +7,7 @@ class EmptyState extends StatelessWidget {
   final String? actionLabel;
   final VoidCallback? onActionPressed;
   final double iconSize;
-  final Color iconColor;
+  final Color? iconColor;
 
   const EmptyState({
     super.key,
@@ -16,7 +16,7 @@ class EmptyState extends StatelessWidget {
     this.actionLabel,
     this.onActionPressed,
     this.iconSize = 80,
-    this.iconColor = AppColors.primary,
+    this.iconColor,
   });
 
   @override
@@ -30,7 +30,7 @@ class EmptyState extends StatelessWidget {
             Icon(
               icon,
               size: iconSize,
-              color: iconColor.withOpacity(0.7),
+              color: (iconColor ?? AppColors.current.primary).withOpacity(0.7),
             ),
             const SizedBox(height: 24),
             Text(
@@ -46,7 +46,7 @@ class EmptyState extends StatelessWidget {
               ElevatedButton(
                 onPressed: onActionPressed,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: AppColors.current.primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,

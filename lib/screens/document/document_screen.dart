@@ -33,7 +33,7 @@ class DocumentScreen extends StatelessWidget {
             ),
           );
         },
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.current.primary,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );

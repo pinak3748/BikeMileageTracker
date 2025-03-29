@@ -88,7 +88,7 @@ class _MaintenanceReminderScreenState extends State<MaintenanceReminderScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Please select a due date'),
-          backgroundColor: AppColors.danger,
+          backgroundColor: AppColors.current.danger,
         ),
       );
       return;
@@ -96,7 +96,7 @@ class _MaintenanceReminderScreenState extends State<MaintenanceReminderScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Please enter a due distance'),
-          backgroundColor: AppColors.danger,
+          backgroundColor: AppColors.current.danger,
         ),
       );
       return;
@@ -105,7 +105,7 @@ class _MaintenanceReminderScreenState extends State<MaintenanceReminderScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Please enter both date and distance'),
-          backgroundColor: AppColors.danger,
+          backgroundColor: AppColors.current.danger,
         ),
       );
       return;
@@ -161,7 +161,7 @@ class _MaintenanceReminderScreenState extends State<MaintenanceReminderScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error saving reminder: $error'),
-          backgroundColor: AppColors.danger,
+          backgroundColor: AppColors.current.danger,
         ),
       );
     } finally {
@@ -187,7 +187,7 @@ class _MaintenanceReminderScreenState extends State<MaintenanceReminderScreen> {
         ],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator(color: AppColors.accent))
+          ? Center(child: CircularProgressIndicator(color: AppColors.current.accent))
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Form(
@@ -289,7 +289,7 @@ class _MaintenanceReminderScreenState extends State<MaintenanceReminderScreen> {
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: AppColors.border),
+                              borderSide: BorderSide(color: AppColors.current.border),
                             ),
                             contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16,
@@ -353,7 +353,7 @@ class _MaintenanceReminderScreenState extends State<MaintenanceReminderScreen> {
                               child: Text(
                                 'Current odometer: ${DateFormatter.formatDistance(bikeProvider.currentBike!.currentOdometer)}',
                                 style: TextStyle(
-                                  color: AppColors.textLight,
+                                  color: AppColors.current.textLight,
                                   fontStyle: FontStyle.italic,
                                 ),
                               ),
@@ -409,7 +409,7 @@ class _MaintenanceReminderScreenState extends State<MaintenanceReminderScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text('Error deleting reminder: $error'),
-                    backgroundColor: AppColors.danger,
+                    backgroundColor: AppColors.current.danger,
                   ),
                 );
               } finally {
@@ -422,7 +422,7 @@ class _MaintenanceReminderScreenState extends State<MaintenanceReminderScreen> {
             },
             child: Text(
               'Delete',
-              style: TextStyle(color: AppColors.danger),
+              style: TextStyle(color: AppColors.current.danger),
             ),
           ),
         ],
