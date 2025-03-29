@@ -20,9 +20,10 @@ class FuelScreen extends StatelessWidget {
         ),
         body: EmptyState(
           message: 'Add your motorcycle to start tracking fuel',
+          title: 'No Bikes Available',
           icon: Icons.motorcycle,
-          actionLabel: 'Add Motorcycle',
-          onActionPressed: () {
+          actionText: 'Add Motorcycle',
+          onAction: () {
             Navigator.of(context).pushNamed('/add-bike');
           },
         ),
@@ -36,9 +37,10 @@ class FuelScreen extends StatelessWidget {
       ),
       body: EmptyState(
         message: 'Keep track of your fuel consumption and expenses',
+        title: 'No Fuel Entries',
         icon: Icons.local_gas_station,
-        actionLabel: 'Add Fuel Entry',
-        onActionPressed: () {
+        actionText: 'Add Fuel Entry',
+        onAction: () {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Fuel entry form will be implemented in the next phase'),

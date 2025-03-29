@@ -1,273 +1,356 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/bike_provider.dart';
-import '../../providers/maintenance_provider.dart';
-import '../../utils/constants.dart';
-import '../../utils/date_formatter.dart';
-import '../../widgets/empty_state.dart';
-import 'maintenance_entry_screen.dart';
+import 'package:intl/intl.dart';
+import 'package:moto_tracker/models/bike.dart';
+import 'package:moto_tracker/models/maintenance_record.dart';
+import 'package:moto_tracker/models/maintenance_status.dart';
+import 'package:moto_tracker/providers/bikes_provider.dart';
+import 'package:moto_tracker/providers/maintenance_provider.dart';
+import 'package:moto_tracker/screens/maintenance/maintenance_entry_screen.dart';
+import 'package:moto_tracker/utils/constants.dart';
+import 'package:moto_tracker/utils/helpers.dart';
+import 'package:moto_tracker/widgets/app_bar.dart';
+import 'package:moto_tracker/widgets/empty_state.dart';
 
 class MaintenanceHistoryScreen extends StatefulWidget {
-  const MaintenanceHistoryScreen({super.key});
+  final String bikeId;
+
+  const MaintenanceHistoryScreen({
+    Key? key,
+    required this.bikeId,
+  }) : super(key: key);
 
   @override
-  State<MaintenanceHistoryScreen> createState() => _MaintenanceHistoryScreenState();
+  _MaintenanceHistoryScreenState createState() =>
+      _MaintenanceHistoryScreenState();
 }
 
 class _MaintenanceHistoryScreenState extends State<MaintenanceHistoryScreen> {
-  bool _isLoading = false;
-  String? _selectedFilter;
+  bool _isLoading = true;
+  late Bike _bike;
+  List<MaintenanceRecord> _records = [];
+  String _selectedFilter = 'All';
+  final List<String> _filterOptions = ['All', ...AppConstants.maintenanceTypes];
 
   @override
   void initState() {
     super.initState();
-    _refreshData();
+    _loadData();
   }
 
-  Future<void> _refreshData() async {
-    final bikeProvider = Provider.of<BikeProvider>(context, listen: false);
-    if (bikeProvider.currentBike != null) {
-      setState(() {
-        _isLoading = true;
-      });
+  Future<void> _loadData() async {
+    setState(() {
+      _isLoading = true;
+    });
 
-      try {
-        final maintenanceProvider = Provider.of<MaintenanceProvider>(context, listen: false);
-        await maintenanceProvider.loadMaintenanceEntries(bikeProvider.currentBike!.id!);
-      } catch (error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error loading maintenance data: $error'),
-            backgroundColor: AppColors.current.danger,
-          ),
-        );
-      } finally {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
+    try {
+      final bikesProvider = Provider.of<BikesProvider>(context, listen: false);
+      final maintenanceProvider =
+          Provider.of<MaintenanceProvider>(context, listen: false);
+
+      final bike = await bikesProvider.getBike(widget.bikeId);
+      await maintenanceProvider.loadMaintenanceRecords(widget.bikeId);
+
+      if (mounted) {
+        setState(() {
+          _bike = bike;
+          _records = maintenanceProvider.getRecordsByBikeId(widget.bikeId);
+          _applyFilter();
+          _isLoading = false;
+        });
       }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error loading maintenance history: $e')),
+        );
+      }
+    }
+  }
+
+  void _applyFilter() {
+    final maintenanceProvider =
+        Provider.of<MaintenanceProvider>(context, listen: false);
+
+    if (_selectedFilter == 'All') {
+      _records = maintenanceProvider.getRecordsByBikeId(widget.bikeId);
+    } else {
+      _records = maintenanceProvider.getMaintenanceByType(
+          widget.bikeId, _selectedFilter);
+    }
+
+    setState(() {});
+  }
+
+  Future<void> _navigateToMaintenanceEntry() async {
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => MaintenanceEntryScreen(
+          bikeId: widget.bikeId,
+        ),
+      ),
+    );
+
+    if (result != null) {
+      _loadData();
+    }
+  }
+
+  Future<void> _navigateToEditMaintenance(MaintenanceRecord record) async {
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => MaintenanceEntryScreen(
+          bikeId: widget.bikeId,
+          existingRecord: record,
+        ),
+      ),
+    );
+
+    if (result != null) {
+      _loadData();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Maintenance History'),
+      appBar: CustomAppBar(
+        title: 'Maintenance History',
         actions: [
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.filter_list),
-            onSelected: (value) {
-              setState(() {
-                if (_selectedFilter == value) {
-                  _selectedFilter = null; // Toggle off if same filter is selected
-                } else {
-                  _selectedFilter = value;
-                }
-              });
+          IconButton(
+            icon: Icon(
+              Icons.filter_list,
+              color: AppColors.current.onPrimary,
+            ),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) => _buildFilterSheet(),
+              );
             },
-            itemBuilder: (ctx) => [
-              const PopupMenuItem(
-                value: 'all',
-                child: Text('All Types'),
-              ),
-              ...AppConstants.maintenanceTypes.map((type) => 
-                PopupMenuItem(
-                  value: type,
-                  child: Text(type),
-                ),
-              ),
-            ],
           ),
         ],
       ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator(color: AppColors.current.accent))
-          : _buildMaintenanceList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (ctx) => const MaintenanceEntryScreen(),
-            ),
-          ).then((_) => _refreshData());
-        },
+        onPressed: _navigateToMaintenanceEntry,
+        backgroundColor: AppColors.current.primary,
+        foregroundColor: AppColors.current.onPrimary,
         child: const Icon(Icons.add),
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _records.isEmpty
+              ? EmptyState(
+                  icon: Icons.build_outlined,
+                  title: 'No Maintenance Records',
+                  message:
+                      'You haven\'t recorded any maintenance for this bike yet.',
+                  actionText: 'Add Maintenance',
+                  onAction: _navigateToMaintenanceEntry,
+                )
+              : ListView.builder(
+                  itemCount: _records.length,
+                  itemBuilder: (context, index) {
+                    final record = _records[index];
+                    return _buildMaintenanceItem(record);
+                  },
+                ),
+    );
+  }
+
+  Widget _buildFilterSheet() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Filter by Type',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.current.text,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Flexible(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: _filterOptions.length,
+              itemBuilder: (context, index) {
+                final option = _filterOptions[index];
+                return RadioListTile<String>(
+                  title: Text(option),
+                  value: option,
+                  groupValue: _selectedFilter,
+                  activeColor: AppColors.current.primary,
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        _selectedFilter = value;
+                      });
+                      _applyFilter();
+                      Navigator.pop(context);
+                    }
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildMaintenanceList() {
-    final maintenanceProvider = Provider.of<MaintenanceProvider>(context);
-    final entries = maintenanceProvider.maintenanceEntries;
-
-    // Apply filter if selected
-    final filteredEntries = _selectedFilter == null || _selectedFilter == 'all'
-        ? entries
-        : entries.where((e) => e.maintenanceType == _selectedFilter).toList();
-
-    if (entries.isEmpty) {
-      return EmptyState(
-        message: 'No maintenance records yet. Add your first maintenance to start tracking.',
-        icon: Icons.build,
-        actionLabel: 'Add Maintenance',
-        onActionPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (ctx) => const MaintenanceEntryScreen()),
-          ).then((_) => _refreshData());
-        },
-      );
-    }
-
-    if (filteredEntries.isEmpty) {
-      return EmptyState(
-        message: 'No maintenance records found for the selected filter.',
-        icon: Icons.filter_list,
-        actionLabel: 'Clear Filter',
-        onActionPressed: () {
-          setState(() {
-            _selectedFilter = null;
-          });
-        },
-      );
-    }
-
-    return RefreshIndicator(
-      onRefresh: _refreshData,
-      child: ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: filteredEntries.length,
-        itemBuilder: (ctx, i) {
-          final entry = filteredEntries[i];
-          return Card(
-            margin: const EdgeInsets.only(bottom: 12.0),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (ctx) => MaintenanceEntryScreen(
-                      maintenance: entry,
-                      isEditing: true,
+  Widget _buildMaintenanceItem(MaintenanceRecord record) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: InkWell(
+        onTap: () => _navigateToEditMaintenance(record),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      record.type,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ).then((_) => _refreshData());
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: record.status == MaintenanceStatus.completed
+                          ? AppColors.current.success.withOpacity(0.2)
+                          : AppColors.current.warning.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      record.status.displayName,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: record.status == MaintenanceStatus.completed
+                            ? AppColors.current.success
+                            : AppColors.current.warning,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Icon(
+                    Icons.calendar_today,
+                    size: 16,
+                    color: AppColors.current.textSecondary,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    DateFormat('MMM dd, yyyy').format(record.date),
+                    style: TextStyle(
+                      color: AppColors.current.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Icon(
+                    Icons.speed,
+                    size: 16,
+                    color: AppColors.current.textSecondary,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '${record.odometer.toStringAsFixed(0)} km',
+                    style: TextStyle(
+                      color: AppColors.current.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+              if (record.cost != null) ...[
+                const SizedBox(height: 8),
+                Row(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            entry.title,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          DateFormatter.formatDate(entry.date),
-                          style: TextStyle(
-                            color: AppColors.current.textLight,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
+                    Icon(
+                      Icons.attach_money,
+                      size: 16,
+                      color: AppColors.current.textSecondary,
                     ),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.build,
-                              size: 16,
-                              color: AppColors.current.textLight,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              entry.maintenanceType,
-                              style: TextStyle(
-                                color: AppColors.current.textLight,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          DateFormatter.formatCurrency(entry.cost),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.current.primary,
-                          ),
-                        ),
-                      ],
+                    const SizedBox(width: 8),
+                    Text(
+                      formatCurrency(record.cost!),
+                      style: TextStyle(
+                        color: AppColors.current.textSecondary,
+                      ),
                     ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.speed,
-                          size: 16,
-                          color: AppColors.current.textLight,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          DateFormatter.formatDistance(entry.odometer),
-                          style: TextStyle(
-                            color: AppColors.current.textLight,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (entry.partsReplaced != null && entry.partsReplaced!.isNotEmpty) ...[
-                      const SizedBox(height: 12),
-                      Divider(color: AppColors.current.border),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Parts: ${entry.partsReplaced}',
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                    if (entry.serviceProvider != null && entry.serviceProvider!.isNotEmpty) ...[
-                      const SizedBox(height: 8),
-                      Text(
-                        'Service: ${entry.serviceProvider}',
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                    if (entry.notes != null && entry.notes!.isNotEmpty) ...[
-                      const SizedBox(height: 12),
-                      Text(
-                        entry.notes!,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontStyle: FontStyle.italic,
-                          color: AppColors.current.textLight,
-                        ),
-                      ),
-                    ],
                   ],
                 ),
-              ),
-            ),
-          );
-        },
+              ],
+              if (record.shopName != null && record.shopName!.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.store,
+                      size: 16,
+                      color: AppColors.current.textSecondary,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      record.shopName!,
+                      style: TextStyle(
+                        color: AppColors.current.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+              if (record.description != null &&
+                  record.description!.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Text(
+                  record.description!,
+                  style: TextStyle(
+                    color: AppColors.current.text,
+                  ),
+                ),
+              ],
+              if (record.isRecurring) ...[
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.repeat,
+                      size: 16,
+                      color: AppColors.current.primary,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Recurring maintenance',
+                      style: TextStyle(
+                        color: AppColors.current.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }

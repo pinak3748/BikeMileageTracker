@@ -1,0 +1,121 @@
+[{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/fuel/fuel_history_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_method",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_method",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The method 'formatVolume' isn't defined for the type 'DateFormatter'.\nTry correcting the name to the name of an existing method, or defining a method named 'formatVolume'.",
+	"source": "dart",
+	"startLineNumber": 200,
+	"startColumn": 45,
+	"endLineNumber": 200,
+	"endColumn": 57,
+	"modelVersionId": 44
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/fuel/fuel_history_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_getter",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_getter",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The getter 'efficiency' isn't defined for the type 'FuelEntry'.\nTry importing the library that defines 'efficiency', correcting the name to the name of an existing getter, or defining a getter or field named 'efficiency'.",
+	"source": "dart",
+	"startLineNumber": 242,
+	"startColumn": 35,
+	"endLineNumber": 242,
+	"endColumn": 45,
+	"modelVersionId": 44
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/fuel/fuel_history_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_method",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_method",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The method 'formatEfficiency' isn't defined for the type 'DateFormatter'.\nTry correcting the name to the name of an existing method, or defining a method named 'formatEfficiency'.",
+	"source": "dart",
+	"startLineNumber": 252,
+	"startColumn": 47,
+	"endLineNumber": 252,
+	"endColumn": 63,
+	"modelVersionId": 44
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/fuel/fuel_history_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_getter",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_getter",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The getter 'efficiency' isn't defined for the type 'FuelEntry'.\nTry importing the library that defines 'efficiency', correcting the name to the name of an existing getter, or defining a getter or field named 'efficiency'.",
+	"source": "dart",
+	"startLineNumber": 253,
+	"startColumn": 43,
+	"endLineNumber": 253,
+	"endColumn": 53,
+	"modelVersionId": 44
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/fuel/fuel_history_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_method",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_method",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The method 'getEfficiencyTrend' isn't defined for the type 'FuelProvider'.\nTry correcting the name to the name of an existing method, or defining a method named 'getEfficiencyTrend'.",
+	"source": "dart",
+	"startLineNumber": 345,
+	"startColumn": 28,
+	"endLineNumber": 345,
+	"endColumn": 46,
+	"modelVersionId": 44
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/fuel/fuel_history_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "use_build_context_synchronously",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/use_build_context_synchronously",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 2,
+	"message": "Don't use 'BuildContext's across async gaps.\nTry rewriting the code to not use the 'BuildContext', or guard the use with a 'mounted' check.",
+	"source": "dart",
+	"startLineNumber": 48,
+	"startColumn": 30,
+	"endLineNumber": 48,
+	"endColumn": 37,
+	"modelVersionId": 44
+}]

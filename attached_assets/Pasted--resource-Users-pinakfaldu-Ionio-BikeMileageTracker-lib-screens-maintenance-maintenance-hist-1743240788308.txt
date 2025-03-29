@@ -1,0 +1,58 @@
+[{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_history_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_method",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_method",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The method 'loadMaintenanceEntries' isn't defined for the type 'MaintenanceProvider'.\nTry correcting the name to the name of an existing method, or defining a method named 'loadMaintenanceEntries'.",
+	"source": "dart",
+	"startLineNumber": 36,
+	"startColumn": 35,
+	"endLineNumber": 36,
+	"endColumn": 57
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_history_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_getter",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_getter",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The getter 'maintenanceEntries' isn't defined for the type 'MaintenanceProvider'.\nTry importing the library that defines 'maintenanceEntries', correcting the name to the name of an existing getter, or defining a getter or field named 'maintenanceEntries'.",
+	"source": "dart",
+	"startLineNumber": 104,
+	"startColumn": 41,
+	"endLineNumber": 104,
+	"endColumn": 59
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_history_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "use_build_context_synchronously",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/use_build_context_synchronously",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 2,
+	"message": "Don't use 'BuildContext's across async gaps.\nTry rewriting the code to not use the 'BuildContext', or guard the use with a 'mounted' check.",
+	"source": "dart",
+	"startLineNumber": 38,
+	"startColumn": 30,
+	"endLineNumber": 38,
+	"endColumn": 37
+}]

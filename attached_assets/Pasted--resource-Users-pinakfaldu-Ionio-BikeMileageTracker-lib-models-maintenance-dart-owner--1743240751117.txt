@@ -1,0 +1,153 @@
+[{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/models/maintenance.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_class",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_class",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined class 'MaintenanceStatus'.\nTry changing the name to the name of an existing class, or creating a class with the name 'MaintenanceStatus'.",
+	"source": "dart",
+	"startLineNumber": 15,
+	"startColumn": 9,
+	"endLineNumber": 15,
+	"endColumn": 26
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/models/maintenance.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'MaintenanceStatus'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 29,
+	"startColumn": 19,
+	"endLineNumber": 29,
+	"endColumn": 36
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/models/maintenance.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_class",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_class",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined class 'MaintenanceStatus'.\nTry changing the name to the name of an existing class, or creating a class with the name 'MaintenanceStatus'.",
+	"source": "dart",
+	"startLineNumber": 44,
+	"startColumn": 5,
+	"endLineNumber": 44,
+	"endColumn": 22
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/models/maintenance.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'MaintenanceStatus'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 92,
+	"startColumn": 15,
+	"endLineNumber": 92,
+	"endColumn": 32
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/models/maintenance.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_class",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_class",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined class 'ReminderType'.\nTry changing the name to the name of an existing class, or creating a class with the name 'ReminderType'.",
+	"source": "dart",
+	"startLineNumber": 109,
+	"startColumn": 9,
+	"endLineNumber": 109,
+	"endColumn": 21
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/models/maintenance.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_class",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_class",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined class 'ReminderType'.\nTry changing the name to the name of an existing class, or creating a class with the name 'ReminderType'.",
+	"source": "dart",
+	"startLineNumber": 132,
+	"startColumn": 5,
+	"endLineNumber": 132,
+	"endColumn": 17
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/models/maintenance.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 171,
+	"startColumn": 21,
+	"endLineNumber": 171,
+	"endColumn": 33
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/models/maintenance.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "unused_import",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/unused_import",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 4,
+	"message": "Unused import: 'package:moto_tracker/utils/constants.dart'.\nTry removing the import directive.",
+	"source": "dart",
+	"startLineNumber": 1,
+	"startColumn": 8,
+	"endLineNumber": 1,
+	"endColumn": 51
+}]

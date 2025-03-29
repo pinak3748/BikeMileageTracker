@@ -31,9 +31,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         body: EmptyState(
           message: 'Add your motorcycle to get started',
+          title: 'Welcome to Bike Tracker',
           icon: Icons.motorcycle,
-          actionLabel: 'Add Motorcycle',
-          onActionPressed: () {
+          actionText: 'Add Motorcycle',
+          onAction: () {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const BikeProfileScreen(isEditing: false),
@@ -107,7 +108,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Expanded(
               child: StatisticsCard(
                 title: 'Distance Traveled',
-                value: DateFormatter.formatDistance(currentBike.distanceTraveled),
+                value: DateFormatter.formatDistance(currentBike.totalDistanceTraveled),
                 icon: Icons.timeline,
                 backgroundColor: Colors.white,
               ),

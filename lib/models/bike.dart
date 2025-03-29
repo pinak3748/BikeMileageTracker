@@ -32,8 +32,6 @@ class Bike {
   })  : createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
 
-  double get distanceTraveled => currentOdometer - initialOdometer;
-
   Bike copyWith({
     String? id,
     String? name,
@@ -107,4 +105,15 @@ class Bike {
       updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updated_at']),
     );
   }
+
+  // Helper method to get the full display name (year, make, model)
+  String get fullDisplayName {
+    if (year != null) {
+      return '$year $make $model';
+    }
+    return '$make $model';
+  }
+
+  // Total distance the bike has traveled since purchase
+  double get totalDistanceTraveled => currentOdometer - initialOdometer;
 }

@@ -1,0 +1,661 @@
+[{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_class",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_class",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined class 'ReminderType'.\nTry changing the name to the name of an existing class, or creating a class with the name 'ReminderType'.",
+	"source": "dart",
+	"startLineNumber": 35,
+	"startColumn": 3,
+	"endLineNumber": 35,
+	"endColumn": 15
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 35,
+	"startColumn": 32,
+	"endLineNumber": 35,
+	"endColumn": 44
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 87,
+	"startColumn": 26,
+	"endLineNumber": 87,
+	"endColumn": 38
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 95,
+	"startColumn": 33,
+	"endLineNumber": 95,
+	"endColumn": 45
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 103,
+	"startColumn": 33,
+	"endLineNumber": 103,
+	"endColumn": 45
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 128,
+	"startColumn": 28,
+	"endLineNumber": 128,
+	"endColumn": 40
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 128,
+	"startColumn": 70,
+	"endLineNumber": 128,
+	"endColumn": 82
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 137,
+	"startColumn": 37,
+	"endLineNumber": 137,
+	"endColumn": 49
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_method",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_method",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The method 'updateReminder' isn't defined for the type 'MaintenanceProvider'.\nTry correcting the name to the name of an existing method, or defining a method named 'updateReminder'.",
+	"source": "dart",
+	"startLineNumber": 142,
+	"startColumn": 35,
+	"endLineNumber": 142,
+	"endColumn": 49
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "argument_type_not_assignable",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/argument_type_not_assignable",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The argument type 'String' can't be assigned to the parameter type 'int'. ",
+	"source": "dart",
+	"startLineNumber": 146,
+	"startColumn": 19,
+	"endLineNumber": 146,
+	"endColumn": 48
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 149,
+	"startColumn": 37,
+	"endLineNumber": 149,
+	"endColumn": 49
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_method",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_method",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The method 'addReminder' isn't defined for the type 'MaintenanceProvider'.\nTry correcting the name to the name of an existing method, or defining a method named 'addReminder'.",
+	"source": "dart",
+	"startLineNumber": 154,
+	"startColumn": 35,
+	"endLineNumber": 154,
+	"endColumn": 46
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_getter",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_getter",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The getter 'text' isn't defined for the type 'AppColors'.\nTry importing the library that defines 'text', correcting the name to the name of an existing getter, or defining a getter or field named 'text'.",
+	"source": "dart",
+	"startLineNumber": 245,
+	"startColumn": 42,
+	"endLineNumber": 245,
+	"endColumn": 46
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "non_type_as_type_argument",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/non_type_as_type_argument",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The name 'ReminderType' isn't a type, so it can't be used as a type argument.\nTry correcting the name to an existing type, or defining a type named 'ReminderType'.",
+	"source": "dart",
+	"startLineNumber": 249,
+	"startColumn": 37,
+	"endLineNumber": 249,
+	"endColumn": 49
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "non_type_as_type_argument",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/non_type_as_type_argument",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The name 'ReminderType' isn't a type, so it can't be used as a type argument.\nTry correcting the name to an existing type, or defining a type named 'ReminderType'.",
+	"source": "dart",
+	"startLineNumber": 251,
+	"startColumn": 39,
+	"endLineNumber": 251,
+	"endColumn": 51
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 252,
+	"startColumn": 34,
+	"endLineNumber": 252,
+	"endColumn": 46
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": "invalid_constant",
+	"severity": 8,
+	"message": "Invalid constant value.",
+	"source": "dart",
+	"startLineNumber": 252,
+	"startColumn": 34,
+	"endLineNumber": 252,
+	"endColumn": 46
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "non_type_as_type_argument",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/non_type_as_type_argument",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The name 'ReminderType' isn't a type, so it can't be used as a type argument.\nTry correcting the name to an existing type, or defining a type named 'ReminderType'.",
+	"source": "dart",
+	"startLineNumber": 256,
+	"startColumn": 39,
+	"endLineNumber": 256,
+	"endColumn": 51
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 257,
+	"startColumn": 34,
+	"endLineNumber": 257,
+	"endColumn": 46
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": "invalid_constant",
+	"severity": 8,
+	"message": "Invalid constant value.",
+	"source": "dart",
+	"startLineNumber": 257,
+	"startColumn": 34,
+	"endLineNumber": 257,
+	"endColumn": 46
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "non_type_as_type_argument",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/non_type_as_type_argument",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The name 'ReminderType' isn't a type, so it can't be used as a type argument.\nTry correcting the name to an existing type, or defining a type named 'ReminderType'.",
+	"source": "dart",
+	"startLineNumber": 261,
+	"startColumn": 39,
+	"endLineNumber": 261,
+	"endColumn": 51
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 262,
+	"startColumn": 34,
+	"endLineNumber": 262,
+	"endColumn": 46
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": "invalid_constant",
+	"severity": 8,
+	"message": "Invalid constant value.",
+	"source": "dart",
+	"startLineNumber": 262,
+	"startColumn": 34,
+	"endLineNumber": 262,
+	"endColumn": 46
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "non_type_as_type_argument",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/non_type_as_type_argument",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The name 'ReminderType' isn't a type, so it can't be used as a type argument.\nTry correcting the name to an existing type, or defining a type named 'ReminderType'.",
+	"source": "dart",
+	"startLineNumber": 268,
+	"startColumn": 48,
+	"endLineNumber": 268,
+	"endColumn": 60
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 277,
+	"startColumn": 42,
+	"endLineNumber": 277,
+	"endColumn": 54
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 277,
+	"startColumn": 80,
+	"endLineNumber": 277,
+	"endColumn": 92
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_getter",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_getter",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The getter 'text' isn't defined for the type 'AppColors'.\nTry importing the library that defines 'text', correcting the name to the name of an existing getter, or defining a getter or field named 'text'.",
+	"source": "dart",
+	"startLineNumber": 282,
+	"startColumn": 44,
+	"endLineNumber": 282,
+	"endColumn": 48
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 311,
+	"startColumn": 42,
+	"endLineNumber": 311,
+	"endColumn": 54
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 311,
+	"startColumn": 84,
+	"endLineNumber": 311,
+	"endColumn": 96
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_getter",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_getter",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The getter 'text' isn't defined for the type 'AppColors'.\nTry importing the library that defines 'text', correcting the name to the name of an existing getter, or defining a getter or field named 'text'.",
+	"source": "dart",
+	"startLineNumber": 316,
+	"startColumn": 44,
+	"endLineNumber": 316,
+	"endColumn": 48
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 327,
+	"startColumn": 54,
+	"endLineNumber": 327,
+	"endColumn": 66
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_identifier",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_identifier",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "Undefined name 'ReminderType'.\nTry correcting the name to one that is defined, or defining the name.",
+	"source": "dart",
+	"startLineNumber": 327,
+	"startColumn": 96,
+	"endLineNumber": 327,
+	"endColumn": 108
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_method",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_method",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The method 'deleteReminder' isn't defined for the type 'MaintenanceProvider'.\nTry correcting the name to the name of an existing method, or defining a method named 'deleteReminder'.",
+	"source": "dart",
+	"startLineNumber": 404,
+	"startColumn": 43,
+	"endLineNumber": 404,
+	"endColumn": 57
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "unused_import",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/unused_import",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 4,
+	"message": "Unused import: 'package:intl/intl.dart'.\nTry removing the import directive.",
+	"source": "dart",
+	"startLineNumber": 3,
+	"startColumn": 8,
+	"endLineNumber": 3,
+	"endColumn": 32
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "use_build_context_synchronously",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/use_build_context_synchronously",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 2,
+	"message": "Don't use 'BuildContext's across async gaps.\nTry rewriting the code to not use the 'BuildContext', or guard the use with a 'mounted' check.",
+	"source": "dart",
+	"startLineNumber": 161,
+	"startColumn": 28,
+	"endLineNumber": 161,
+	"endColumn": 35
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/maintenance/maintenance_reminder_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "use_build_context_synchronously",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/use_build_context_synchronously",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 2,
+	"message": "Don't use 'BuildContext's across async gaps.\nTry rewriting the code to not use the 'BuildContext', or guard the use with a 'mounted' check.",
+	"source": "dart",
+	"startLineNumber": 409,
+	"startColumn": 38,
+	"endLineNumber": 409,
+	"endColumn": 45
+}]

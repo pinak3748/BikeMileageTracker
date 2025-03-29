@@ -1,0 +1,121 @@
+[{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/expense/expense_history_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_getter",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_getter",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The getter 'notes' isn't defined for the type 'Expense'.\nTry importing the library that defines 'notes', correcting the name to the name of an existing getter, or defining a getter or field named 'notes'.",
+	"source": "dart",
+	"startLineNumber": 267,
+	"startColumn": 33,
+	"endLineNumber": 267,
+	"endColumn": 38,
+	"modelVersionId": 7
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/expense/expense_history_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_getter",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_getter",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The getter 'notes' isn't defined for the type 'Expense'.\nTry importing the library that defines 'notes', correcting the name to the name of an existing getter, or defining a getter or field named 'notes'.",
+	"source": "dart",
+	"startLineNumber": 267,
+	"startColumn": 58,
+	"endLineNumber": 267,
+	"endColumn": 63,
+	"modelVersionId": 7
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/expense/expense_history_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_getter",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_getter",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The getter 'notes' isn't defined for the type 'Expense'.\nTry importing the library that defines 'notes', correcting the name to the name of an existing getter, or defining a getter or field named 'notes'.",
+	"source": "dart",
+	"startLineNumber": 272,
+	"startColumn": 33,
+	"endLineNumber": 272,
+	"endColumn": 38,
+	"modelVersionId": 7
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/expense/expense_history_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_method",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_method",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The method 'getExpenseStatistics' isn't defined for the type 'ExpenseProvider'.\nTry correcting the name to the name of an existing method, or defining a method named 'getExpenseStatistics'.",
+	"source": "dart",
+	"startLineNumber": 305,
+	"startColumn": 25,
+	"endLineNumber": 305,
+	"endColumn": 45,
+	"modelVersionId": 7
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/expense/expense_history_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_method",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_method",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The method 'getMonthlyExpenses' isn't defined for the type 'ExpenseProvider'.\nTry correcting the name to the name of an existing method, or defining a method named 'getMonthlyExpenses'.",
+	"source": "dart",
+	"startLineNumber": 306,
+	"startColumn": 25,
+	"endLineNumber": 306,
+	"endColumn": 43,
+	"modelVersionId": 7
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/expense/expense_history_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "use_build_context_synchronously",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/use_build_context_synchronously",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 2,
+	"message": "Don't use 'BuildContext's across async gaps.\nTry rewriting the code to not use the 'BuildContext', or guard the use with a 'mounted' check.",
+	"source": "dart",
+	"startLineNumber": 53,
+	"startColumn": 30,
+	"endLineNumber": 53,
+	"endColumn": 37,
+	"modelVersionId": 7
+}]

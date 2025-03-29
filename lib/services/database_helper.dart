@@ -21,7 +21,7 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), AppConfig.dbName);
     return await openDatabase(
       path, 
-      version: 2, 
+      version: 3, 
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -37,6 +37,26 @@ class DatabaseHelper {
         UPDATE fuel_entries 
         SET fill_type = CASE WHEN is_fillup = 1 THEN 'full' ELSE 'partial' END
       ''');
+    }
+    
+    if (oldVersion < 3) {
+      // Add status column to maintenance_records table
+      await db.execute('ALTER TABLE maintenance_records ADD COLUMN status TEXT DEFAULT "pending"');
+      
+      // Add reminder_type column to maintenance_records table
+      await db.execute('ALTER TABLE maintenance_records ADD COLUMN reminder_type TEXT DEFAULT "none"');
+      
+      // Add notes column to maintenance_records table
+      await db.execute('ALTER TABLE maintenance_records ADD COLUMN notes TEXT');
+      
+      // Add receipt_url column to maintenance_records table
+      await db.execute('ALTER TABLE maintenance_records ADD COLUMN receipt_url TEXT');
+      
+      // Add notes column to expenses table
+      await db.execute('ALTER TABLE expenses ADD COLUMN notes TEXT');
+      
+      // Add receipt_url column to expenses table
+      await db.execute('ALTER TABLE expenses ADD COLUMN receipt_url TEXT');
     }
   }
   
@@ -95,6 +115,10 @@ class DatabaseHelper {
         is_recurring INTEGER NOT NULL,
         recurring_interval REAL,
         next_due_date INTEGER,
+        status TEXT DEFAULT "pending",
+        reminder_type TEXT DEFAULT "none",
+        notes TEXT,
+        receipt_url TEXT,
         created_at INTEGER NOT NULL,
         updated_at INTEGER NOT NULL,
         FOREIGN KEY (bike_id) REFERENCES bikes (id) ON DELETE CASCADE
@@ -113,6 +137,8 @@ class DatabaseHelper {
         odometer REAL,
         vendor TEXT,
         description TEXT,
+        notes TEXT,
+        receipt_url TEXT,
         created_at INTEGER NOT NULL,
         updated_at INTEGER NOT NULL,
         FOREIGN KEY (bike_id) REFERENCES bikes (id) ON DELETE CASCADE

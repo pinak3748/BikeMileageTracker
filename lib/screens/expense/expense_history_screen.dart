@@ -141,9 +141,10 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> with Single
     if (expenses.isEmpty) {
       return EmptyState(
         message: 'No expenses recorded yet. Start tracking your motorcycle expenses.',
+        title: 'No Expenses',
         icon: Icons.attach_money,
-        actionLabel: 'Add Expense',
-        onActionPressed: () {
+        actionText: 'Add Expense',
+        onAction: () {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (ctx) => const ExpenseEntryScreen()),
           ).then((_) => _refreshExpenseData());
@@ -154,9 +155,10 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> with Single
     if (filteredExpenses.isEmpty) {
       return EmptyState(
         message: 'No expenses found in the selected category.',
+        title: 'No Matching Expenses',
         icon: Icons.filter_list,
-        actionLabel: 'Clear Filter',
-        onActionPressed: () {
+        actionText: 'Clear Filter',
+        onAction: () {
           setState(() {
             _selectedFilter = null;
           });
@@ -294,9 +296,10 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> with Single
     if (!bikeProvider.hasBikes) {
       return EmptyState(
         message: 'Add your motorcycle to see expense charts',
+        title: 'No Motorcycle Added',
         icon: Icons.show_chart,
-        actionLabel: 'Add Motorcycle',
-        onActionPressed: () {},
+        actionText: 'Add Motorcycle',
+        onAction: () {},
       );
     }
 
@@ -325,9 +328,10 @@ class _ExpenseHistoryScreenState extends State<ExpenseHistoryScreen> with Single
         if (stats.isEmpty || (stats['totalExpenses'] as double) <= 0) {
           return EmptyState(
             message: 'No expense data to display',
+            title: 'No Chart Data',
             icon: Icons.show_chart,
-            actionLabel: 'Add Expense',
-            onActionPressed: () {
+            actionText: 'Add Expense',
+            onAction: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (ctx) => const ExpenseEntryScreen()),
               ).then((_) => _refreshExpenseData());

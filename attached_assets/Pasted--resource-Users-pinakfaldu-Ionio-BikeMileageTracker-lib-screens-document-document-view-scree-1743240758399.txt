@@ -1,0 +1,181 @@
+[{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/document/document_view_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_getter",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_getter",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The getter 'text' isn't defined for the type 'AppColors'.\nTry importing the library that defines 'text', correcting the name to the name of an existing getter, or defining a getter or field named 'text'.",
+	"source": "dart",
+	"startLineNumber": 202,
+	"startColumn": 48,
+	"endLineNumber": 202,
+	"endColumn": 52,
+	"modelVersionId": 17
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/document/document_view_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_getter",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_getter",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The getter 'text' isn't defined for the type 'AppColors'.\nTry importing the library that defines 'text', correcting the name to the name of an existing getter, or defining a getter or field named 'text'.",
+	"source": "dart",
+	"startLineNumber": 244,
+	"startColumn": 48,
+	"endLineNumber": 244,
+	"endColumn": 52,
+	"modelVersionId": 17
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/document/document_view_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_getter",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_getter",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The getter 'text' isn't defined for the type 'AppColors'.\nTry importing the library that defines 'text', correcting the name to the name of an existing getter, or defining a getter or field named 'text'.",
+	"source": "dart",
+	"startLineNumber": 289,
+	"startColumn": 50,
+	"endLineNumber": 289,
+	"endColumn": 54,
+	"modelVersionId": 17
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/document/document_view_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_getter",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_getter",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The getter 'text' isn't defined for the type 'AppColors'.\nTry importing the library that defines 'text', correcting the name to the name of an existing getter, or defining a getter or field named 'text'.",
+	"source": "dart",
+	"startLineNumber": 296,
+	"startColumn": 50,
+	"endLineNumber": 296,
+	"endColumn": 54,
+	"modelVersionId": 17
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/document/document_view_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "undefined_getter",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/undefined_getter",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 8,
+	"message": "The getter 'text' isn't defined for the type 'AppColors'.\nTry importing the library that defines 'text', correcting the name to the name of an existing getter, or defining a getter or field named 'text'.",
+	"source": "dart",
+	"startLineNumber": 332,
+	"startColumn": 41,
+	"endLineNumber": 332,
+	"endColumn": 45,
+	"modelVersionId": 17
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/document/document_view_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "unused_import",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/unused_import",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 4,
+	"message": "Unused import: 'package:path_provider/path_provider.dart'.\nTry removing the import directive.",
+	"source": "dart",
+	"startLineNumber": 4,
+	"startColumn": 8,
+	"endLineNumber": 4,
+	"endColumn": 50,
+	"modelVersionId": 17
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/document/document_view_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "unused_field",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/unused_field",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 4,
+	"message": "The value of the field '_fileExtension' isn't used.\nTry removing the field, or using it.",
+	"source": "dart",
+	"startLineNumber": 27,
+	"startColumn": 15,
+	"endLineNumber": 27,
+	"endColumn": 29,
+	"modelVersionId": 17
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/document/document_view_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "use_build_context_synchronously",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/use_build_context_synchronously",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 2,
+	"message": "Don't use 'BuildContext's across async gaps.\nTry rewriting the code to not use the 'BuildContext', or guard the use with a 'mounted' check.",
+	"source": "dart",
+	"startLineNumber": 46,
+	"startColumn": 28,
+	"endLineNumber": 46,
+	"endColumn": 35,
+	"modelVersionId": 17
+},{
+	"resource": "/Users/pinakfaldu/Ionio/BikeMileageTracker/lib/screens/document/document_view_screen.dart",
+	"owner": "_generated_diagnostic_collection_name_#0",
+	"code": {
+		"value": "use_build_context_synchronously",
+		"target": {
+			"$mid": 1,
+			"path": "/diagnostics/use_build_context_synchronously",
+			"scheme": "https",
+			"authority": "dart.dev"
+		}
+	},
+	"severity": 2,
+	"message": "Don't use 'BuildContext's across async gaps.\nTry rewriting the code to not use the 'BuildContext', or guard the use with a 'mounted' check.",
+	"source": "dart",
+	"startLineNumber": 92,
+	"startColumn": 62,
+	"endLineNumber": 92,
+	"endColumn": 69,
+	"modelVersionId": 17
+}]

@@ -1,112 +1,143 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import '../../models/maintenance.dart';
-import '../../providers/bike_provider.dart';
-import '../../providers/maintenance_provider.dart';
-import '../../utils/constants.dart';
-import '../../utils/date_formatter.dart';
+import 'package:moto_tracker/models/bike.dart';
+import 'package:moto_tracker/models/maintenance_record.dart';
+import 'package:moto_tracker/models/maintenance_status.dart';
+import 'package:moto_tracker/models/reminder_type.dart';
+import 'package:moto_tracker/providers/bikes_provider.dart';
+import 'package:moto_tracker/providers/maintenance_provider.dart';
+import 'package:moto_tracker/utils/constants.dart';
+import 'package:moto_tracker/utils/helpers.dart';
+import 'package:moto_tracker/widgets/app_bar.dart';
+import 'package:moto_tracker/widgets/custom_dropdown.dart';
 
 class MaintenanceReminderScreen extends StatefulWidget {
-  final MaintenanceReminder? reminder;
-  final bool isEditing;
+  final String bikeId;
+  final MaintenanceRecord? existingReminder;
 
   const MaintenanceReminderScreen({
-    super.key,
-    this.reminder,
-    this.isEditing = false,
-  });
+    Key? key,
+    required this.bikeId,
+    this.existingReminder,
+  }) : super(key: key);
 
   @override
-  State<MaintenanceReminderScreen> createState() => _MaintenanceReminderScreenState();
+  _MaintenanceReminderScreenState createState() =>
+      _MaintenanceReminderScreenState();
 }
 
 class _MaintenanceReminderScreenState extends State<MaintenanceReminderScreen> {
   final _formKey = GlobalKey<FormState>();
+  late TextEditingController _typeController;
+  late TextEditingController _odometerController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _intervalDistanceController;
+  late TextEditingController _intervalTimeController;
+  DateTime _nextDueDate = DateTime.now().add(const Duration(days: 90));
   bool _isLoading = false;
-
-  // Form controllers
-  final _titleController = TextEditingController();
-  final _distanceController = TextEditingController();
-
-  // Form state
-  DateTime? _selectedDate;
-  String? _selectedMaintenanceType;
-  ReminderType _reminderType = ReminderType.date;
+  late Bike _bike;
+  String _selectedMaintenanceType = '';
+  ReminderType _reminderType = ReminderType.time;
+  bool _isOdometerBased = false;
+  bool _isTimeBased = true;
 
   @override
   void initState() {
     super.initState();
-    
-    // If editing, populate form with existing data
-    if (widget.isEditing && widget.reminder != null) {
-      final reminder = widget.reminder!;
-      _titleController.text = reminder.title;
-      _selectedMaintenanceType = reminder.maintenanceType;
+    _typeController = TextEditingController(
+        text: widget.existingReminder?.type ?? '');
+    _odometerController = TextEditingController(
+        text: (widget.existingReminder?.odometer ?? 0).toString());
+    _descriptionController = TextEditingController(
+        text: widget.existingReminder?.description ?? '');
+    _intervalDistanceController = TextEditingController(
+        text: widget.existingReminder?.intervalDistance?.toString() ?? '1000');
+    _intervalTimeController = TextEditingController(
+        text: widget.existingReminder?.intervalDays?.toString() ?? '90');
+
+    if (widget.existingReminder != null) {
+      _nextDueDate = widget.existingReminder!.nextDueDate ?? DateTime.now().add(const Duration(days: 90));
+      _selectedMaintenanceType = widget.existingReminder!.type;
       
-      if (reminder.dueDate != null) {
-        _selectedDate = reminder.dueDate;
+      if (widget.existingReminder!.reminderType != null) {
+        _reminderType = widget.existingReminder!.reminderType!;
       }
       
-      if (reminder.dueDistance != null) {
-        _distanceController.text = reminder.dueDistance.toString();
-      }
-      
-      _reminderType = reminder.reminderType;
+      // Set checkbox states based on reminder type
+      _isOdometerBased = _reminderType == ReminderType.odometer || _reminderType == ReminderType.both;
+      _isTimeBased = _reminderType == ReminderType.time || _reminderType == ReminderType.both;
+    } else {
+      _selectedMaintenanceType = AppConstants.maintenanceTypes.first;
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadBikeData();
+    });
   }
 
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _distanceController.dispose();
-    super.dispose();
+  Future<void> _loadBikeData() async {
+    final bikesProvider = Provider.of<BikesProvider>(context, listen: false);
+    final bike = await bikesProvider.getBike(widget.bikeId);
+    
+    if (mounted) {
+      setState(() {
+        _bike = bike;
+        if (widget.existingReminder == null) {
+          _odometerController.text = bike.currentOdometer.toString();
+        }
+      });
+    }
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate ?? DateTime.now().add(const Duration(days: 30)),
+      initialDate: _nextDueDate,
       firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 365 * 5)),
+      lastDate: DateTime.now().add(const Duration(days: 365 * 2)), // 2 years ahead
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.current.primary,
+              onPrimary: AppColors.current.onPrimary,
+              onSurface: AppColors.current.text,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     
-    if (picked != null) {
+    if (picked != null && picked != _nextDueDate) {
       setState(() {
-        _selectedDate = picked;
+        _nextDueDate = picked;
       });
     }
   }
 
-  Future<void> _saveReminder() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
+  void _updateReminderType() {
+    if (_isOdometerBased && _isTimeBased) {
+      _reminderType = ReminderType.both;
+    } else if (_isOdometerBased) {
+      _reminderType = ReminderType.odometer;
+    } else if (_isTimeBased) {
+      _reminderType = ReminderType.time;
+    } else {
+      // Default if none selected
+      _reminderType = ReminderType.time;
+      _isTimeBased = true;
     }
+  }
 
-    // Additional validation based on reminder type
-    if (_reminderType == ReminderType.date && _selectedDate == null) {
+  Future<void> _saveReminder() async {
+    if (!_formKey.currentState!.validate()) return;
+    
+    // Make sure at least one reminder type is selected
+    if (!_isOdometerBased && !_isTimeBased) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Please select a due date'),
-          backgroundColor: AppColors.current.danger,
-        ),
-      );
-      return;
-    } else if (_reminderType == ReminderType.distance && _distanceController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Please enter a due distance'),
-          backgroundColor: AppColors.current.danger,
-        ),
-      );
-      return;
-    } else if (_reminderType == ReminderType.both && 
-              (_selectedDate == null || _distanceController.text.isEmpty)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Please enter both date and distance'),
-          backgroundColor: AppColors.current.danger,
-        ),
+        const SnackBar(content: Text('Please select at least one reminder type')),
       );
       return;
     }
@@ -115,54 +146,63 @@ class _MaintenanceReminderScreenState extends State<MaintenanceReminderScreen> {
       _isLoading = true;
     });
 
+    final maintenanceProvider = Provider.of<MaintenanceProvider>(context, listen: false);
+    
     try {
-      final bikeProvider = Provider.of<BikeProvider>(context, listen: false);
-      final maintenanceProvider = Provider.of<MaintenanceProvider>(context, listen: false);
-
-      if (bikeProvider.currentBike == null) {
-        throw Exception('No bike selected');
-      }
-
-      final title = _titleController.text;
-      double? dueDistance;
-      if (_reminderType == ReminderType.distance || _reminderType == ReminderType.both) {
-        dueDistance = double.parse(_distanceController.text);
-      }
-
-      if (widget.isEditing && widget.reminder != null) {
+      // Update reminder type
+      _updateReminderType();
+      
+      // Get type from controller or dropdown
+      final maintenanceType = _typeController.text.isNotEmpty
+          ? _typeController.text
+          : _selectedMaintenanceType;
+          
+      if (widget.existingReminder != null) {
         // Update existing reminder
-        final updatedReminder = widget.reminder!.copyWith(
-          title: title,
-          maintenanceType: _selectedMaintenanceType!,
-          dueDate: _reminderType == ReminderType.distance ? null : _selectedDate,
-          dueDistance: dueDistance,
+        final updatedReminder = widget.existingReminder!.copyWith(
+          type: maintenanceType,
+          odometer: double.parse(_odometerController.text),
+          description: _descriptionController.text.isNotEmpty ? _descriptionController.text : null,
+          nextDueDate: _nextDueDate,
           reminderType: _reminderType,
+          isRecurring: true,
+          status: MaintenanceStatus.scheduled,
+          intervalDistance: _isOdometerBased && _intervalDistanceController.text.isNotEmpty 
+              ? double.parse(_intervalDistanceController.text) 
+              : null,
+          intervalDays: _isTimeBased && _intervalTimeController.text.isNotEmpty 
+              ? int.parse(_intervalTimeController.text) 
+              : null,
         );
-
-        await maintenanceProvider.updateReminder(updatedReminder);
+        
+        await maintenanceProvider.updateMaintenanceReminder(updatedReminder);
       } else {
         // Create new reminder
-        final newReminder = MaintenanceReminder(
-          bikeId: bikeProvider.currentBike!.id!,
-          title: title,
-          maintenanceType: _selectedMaintenanceType!,
-          dueDate: _reminderType == ReminderType.distance ? null : _selectedDate,
-          dueDistance: dueDistance,
+        final newReminder = MaintenanceRecord(
+          bikeId: widget.bikeId,
+          type: maintenanceType,
+          date: DateTime.now(),
+          odometer: double.parse(_odometerController.text),
+          description: _descriptionController.text.isNotEmpty ? _descriptionController.text : null,
+          nextDueDate: _nextDueDate,
           reminderType: _reminderType,
+          isRecurring: true,
+          status: MaintenanceStatus.scheduled,
+          intervalDistance: _isOdometerBased && _intervalDistanceController.text.isNotEmpty 
+              ? double.parse(_intervalDistanceController.text) 
+              : null,
+          intervalDays: _isTimeBased && _intervalTimeController.text.isNotEmpty 
+              ? int.parse(_intervalTimeController.text) 
+              : null,
         );
-
-        await maintenanceProvider.addReminder(newReminder);
+        
+        await maintenanceProvider.addMaintenanceReminder(newReminder);
       }
-
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
-    } catch (error) {
+      
+      Navigator.of(context).pop();
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error saving reminder: $error'),
-          backgroundColor: AppColors.current.danger,
-        ),
+        SnackBar(content: Text('Error saving reminder: $e')),
       );
     } finally {
       if (mounted) {
@@ -174,259 +214,308 @@ class _MaintenanceReminderScreenState extends State<MaintenanceReminderScreen> {
   }
 
   @override
+  void dispose() {
+    _typeController.dispose();
+    _odometerController.dispose();
+    _descriptionController.dispose();
+    _intervalDistanceController.dispose();
+    _intervalTimeController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isEditing = widget.existingReminder != null;
+    
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.isEditing ? 'Edit Reminder' : 'Set Maintenance Reminder'),
+      appBar: CustomAppBar(
+        title: isEditing ? 'Edit Reminder' : 'Add Reminder',
         actions: [
-          if (widget.isEditing)
+          if (isEditing)
             IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: _confirmDelete,
+              icon: Icon(
+                Icons.delete,
+                color: AppColors.current.error,
+              ),
+              onPressed: () {
+                // Show confirmation dialog
+                showConfirmationDialog(
+                  context,
+                  title: 'Delete Reminder',
+                  message: 'Are you sure you want to delete this maintenance reminder?',
+                  confirmText: 'Delete',
+                ).then((confirmed) async {
+                  if (confirmed) {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    
+                    try {
+                      final maintenanceProvider = Provider.of<MaintenanceProvider>(context, listen: false);
+                      await maintenanceProvider.deleteMaintenanceRecord(widget.existingReminder!.id!);
+                      Navigator.of(context).pop();
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error deleting reminder: $e')),
+                      );
+                    } finally {
+                      if (mounted) {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
+                    }
+                  }
+                });
+              },
             ),
         ],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator(color: AppColors.current.accent))
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Title
-                    TextFormField(
-                      controller: _titleController,
-                      decoration: const InputDecoration(
-                        labelText: 'Reminder Title',
-                        hintText: 'E.g., Oil Change, Chain Lubrication',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a title';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Maintenance Type
-                    DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(
-                        labelText: 'Maintenance Type',
-                      ),
-                      value: _selectedMaintenanceType,
-                      items: AppConstants.maintenanceTypes.map((type) {
-                        return DropdownMenuItem<String>(
-                          value: type,
-                          child: Text(type),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedMaintenanceType = value;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please select a maintenance type';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Reminder Type
-                    Text(
-                      'Reminder Type:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.text,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    SegmentedButton<ReminderType>(
-                      segments: const [
-                        ButtonSegment<ReminderType>(
-                          value: ReminderType.date,
-                          label: Text('By Date'),
-                          icon: Icon(Icons.calendar_today),
-                        ),
-                        ButtonSegment<ReminderType>(
-                          value: ReminderType.distance,
-                          label: Text('By Distance'),
-                          icon: Icon(Icons.speed),
-                        ),
-                        ButtonSegment<ReminderType>(
-                          value: ReminderType.both,
-                          label: Text('Both'),
-                          icon: Icon(Icons.all_inclusive),
-                        ),
-                      ],
-                      selected: {_reminderType},
-                      onSelectionChanged: (Set<ReminderType> selected) {
-                        setState(() {
-                          _reminderType = selected.first;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Date Picker (for Date or Both)
-                    if (_reminderType == ReminderType.date || _reminderType == ReminderType.both) ...[
-                      Text(
-                        'Due Date:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.text,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      InkWell(
-                        onTap: () => _selectDate(context),
-                        child: InputDecorator(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: AppColors.current.border),
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                            suffixIcon: const Icon(Icons.calendar_today),
-                          ),
-                          child: Text(
-                            _selectedDate != null
-                                ? DateFormatter.formatDate(_selectedDate!)
-                                : 'Select a date',
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-
-                    // Distance Input (for Distance or Both)
-                    if (_reminderType == ReminderType.distance || _reminderType == ReminderType.both) ...[
-                      Text(
-                        'Due at Odometer:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.text,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFormField(
-                        controller: _distanceController,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter odometer reading',
-                          suffixText: 'km',
-                        ),
-                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                        validator: (_reminderType == ReminderType.distance || _reminderType == ReminderType.both)
-                            ? (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter a distance';
-                                }
-                                final distance = double.tryParse(value);
-                                if (distance == null) {
-                                  return 'Invalid number';
-                                }
-                                final bikeProvider = Provider.of<BikeProvider>(context, listen: false);
-                                if (bikeProvider.currentBike != null &&
-                                    distance <= bikeProvider.currentBike!.currentOdometer) {
-                                  return 'Must be greater than current odometer';
-                                }
-                                return null;
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Maintenance Type Dropdown
+                      CustomDropdown<String>(
+                        label: 'Maintenance Type',
+                        value: _selectedMaintenanceType,
+                        items: AppConstants.maintenanceTypes.map((type) {
+                          return DropdownMenuItem<String>(
+                            value: type,
+                            child: Text(type),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              _selectedMaintenanceType = value;
+                              if (_typeController.text.isEmpty || 
+                                  AppConstants.maintenanceTypes.contains(_typeController.text)) {
+                                _typeController.text = value;
                               }
-                            : null,
-                      ),
-                      const SizedBox(height: 16),
-                      
-                      // Current odometer reading display
-                      Consumer<BikeProvider>(
-                        builder: (ctx, bikeProvider, _) {
-                          if (bikeProvider.currentBike != null) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 16.0),
-                              child: Text(
-                                'Current odometer: ${DateFormatter.formatDistance(bikeProvider.currentBike!.currentOdometer)}',
-                                style: TextStyle(
-                                  color: AppColors.current.textLight,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                            );
+                            });
                           }
-                          return const SizedBox();
                         },
                       ),
-                    ],
-
-                    // Save Button
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _saveReminder,
-                        child: Text(widget.isEditing ? 'Update' : 'Set Reminder'),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Custom Type Input (if needed)
+                      TextFormField(
+                        controller: _typeController,
+                        decoration: const InputDecoration(
+                          labelText: 'Custom Type (if not listed above)',
+                          border: OutlineInputBorder(),
+                        ),
                       ),
-                    ),
-                  ],
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Next Due Date Picker
+                      Text(
+                        'Next Due Date',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.current.text,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: () => _selectDate(context),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                DateFormat('MMMM dd, yyyy').format(_nextDueDate),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: AppColors.current.text,
+                                ),
+                              ),
+                              Icon(
+                                Icons.calendar_today,
+                                color: AppColors.current.primary,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Current Odometer Reading
+                      TextFormField(
+                        controller: _odometerController,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        decoration: const InputDecoration(
+                          labelText: 'Current Odometer Reading (km)',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter the odometer reading';
+                          }
+                          if (double.tryParse(value) == null) {
+                            return 'Please enter a valid number';
+                          }
+                          return null;
+                        },
+                      ),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Description
+                      TextFormField(
+                        controller: _descriptionController,
+                        decoration: const InputDecoration(
+                          labelText: 'Description',
+                          border: OutlineInputBorder(),
+                        ),
+                        maxLines: 2,
+                      ),
+                      
+                      const SizedBox(height: 24),
+                      
+                      // Reminder Type Section
+                      Text(
+                        'Reminder Type',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.current.text,
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 8),
+                      
+                      // Checkbox for Time-based
+                      CheckboxListTile(
+                        title: const Text('Time-based Reminder'),
+                        value: _isTimeBased,
+                        activeColor: AppColors.current.primary,
+                        contentPadding: EdgeInsets.zero,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              _isTimeBased = value;
+                              if (!_isTimeBased && !_isOdometerBased) {
+                                _isOdometerBased = true;
+                              }
+                            });
+                          }
+                        },
+                      ),
+                      
+                      // Interval in days (if time-based)
+                      if (_isTimeBased)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 32),
+                          child: TextFormField(
+                            controller: _intervalTimeController,
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              labelText: 'Repeat every (days)',
+                              border: OutlineInputBorder(),
+                              helperText: 'e.g., 90 for every 3 months',
+                            ),
+                            validator: (value) {
+                              if (_isTimeBased) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the interval';
+                                }
+                                if (int.tryParse(value) == null) {
+                                  return 'Please enter a valid number';
+                                }
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        
+                      const SizedBox(height: 16),
+                      
+                      // Checkbox for Odometer-based
+                      CheckboxListTile(
+                        title: const Text('Odometer-based Reminder'),
+                        value: _isOdometerBased,
+                        activeColor: AppColors.current.primary,
+                        contentPadding: EdgeInsets.zero,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              _isOdometerBased = value;
+                              if (!_isTimeBased && !_isOdometerBased) {
+                                _isTimeBased = true;
+                              }
+                            });
+                          }
+                        },
+                      ),
+                      
+                      // Interval in kilometers (if odometer-based)
+                      if (_isOdometerBased)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 32),
+                          child: TextFormField(
+                            controller: _intervalDistanceController,
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            decoration: const InputDecoration(
+                              labelText: 'Repeat every (km)',
+                              border: OutlineInputBorder(),
+                              helperText: 'e.g., 5000 for every 5,000 km',
+                            ),
+                            validator: (value) {
+                              if (_isOdometerBased) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the interval';
+                                }
+                                if (double.tryParse(value) == null) {
+                                  return 'Please enter a valid number';
+                                }
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        
+                      const SizedBox(height: 32),
+                      
+                      // Save Button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: _saveReminder,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.current.primary,
+                            foregroundColor: AppColors.current.onPrimary,
+                          ),
+                          child: Text(
+                            isEditing ? 'Update Reminder' : 'Save Reminder',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-    );
-  }
-
-  void _confirmDelete() {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Delete Reminder'),
-        content: const Text(
-          'Are you sure you want to delete this reminder? This action cannot be undone.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.of(ctx).pop();
-              setState(() {
-                _isLoading = true;
-              });
-
-              try {
-                final maintenanceProvider = Provider.of<MaintenanceProvider>(context, listen: false);
-                await maintenanceProvider.deleteReminder(widget.reminder!.id!);
-                if (mounted) {
-                  Navigator.of(context).pop();
-                }
-              } catch (error) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Error deleting reminder: $error'),
-                    backgroundColor: AppColors.current.danger,
-                  ),
-                );
-              } finally {
-                if (mounted) {
-                  setState(() {
-                    _isLoading = false;
-                  });
-                }
-              }
-            },
-            child: Text(
-              'Delete',
-              style: TextStyle(color: AppColors.current.danger),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

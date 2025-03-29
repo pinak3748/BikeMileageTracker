@@ -1,30 +1,28 @@
 class MaintenanceRecord {
   final String? id;
   final String bikeId;
-  final String type;
+  final String title;
+  final String category;
   final DateTime date;
-  final double odometer;
-  final double? cost;
-  final String? shopName;
-  final String? description;
-  final bool isRecurring;
-  final double? recurringInterval;
-  final DateTime? nextDueDate;
+  final double? odometer;
+  final double cost;
+  final String? notes;
+  final String? serviceProvider;
+  final String? partNumbers;
   final DateTime createdAt;
   final DateTime updatedAt;
 
   MaintenanceRecord({
     this.id,
     required this.bikeId,
-    required this.type,
+    required this.title,
+    required this.category,
     required this.date,
-    required this.odometer,
-    this.cost,
-    this.shopName,
-    this.description,
-    required this.isRecurring,
-    this.recurringInterval,
-    this.nextDueDate,
+    this.odometer,
+    this.cost = 0.0,
+    this.notes,
+    this.serviceProvider,
+    this.partNumbers,
     DateTime? createdAt,
     DateTime? updatedAt,
   })  : createdAt = createdAt ?? DateTime.now(),
@@ -33,30 +31,28 @@ class MaintenanceRecord {
   MaintenanceRecord copyWith({
     String? id,
     String? bikeId,
-    String? type,
+    String? title,
+    String? category,
     DateTime? date,
     double? odometer,
     double? cost,
-    String? shopName,
-    String? description,
-    bool? isRecurring,
-    double? recurringInterval,
-    DateTime? nextDueDate,
+    String? notes,
+    String? serviceProvider,
+    String? partNumbers,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
     return MaintenanceRecord(
       id: id ?? this.id,
       bikeId: bikeId ?? this.bikeId,
-      type: type ?? this.type,
+      title: title ?? this.title,
+      category: category ?? this.category,
       date: date ?? this.date,
       odometer: odometer ?? this.odometer,
       cost: cost ?? this.cost,
-      shopName: shopName ?? this.shopName,
-      description: description ?? this.description,
-      isRecurring: isRecurring ?? this.isRecurring,
-      recurringInterval: recurringInterval ?? this.recurringInterval,
-      nextDueDate: nextDueDate ?? this.nextDueDate,
+      notes: notes ?? this.notes,
+      serviceProvider: serviceProvider ?? this.serviceProvider,
+      partNumbers: partNumbers ?? this.partNumbers,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? DateTime.now(),
     );
@@ -66,15 +62,14 @@ class MaintenanceRecord {
     return {
       if (id != null) 'id': id,
       'bike_id': bikeId,
-      'type': type,
+      'title': title,
+      'category': category,
       'date': date.millisecondsSinceEpoch,
       'odometer': odometer,
       'cost': cost,
-      'shop_name': shopName,
-      'description': description,
-      'is_recurring': isRecurring ? 1 : 0,
-      'recurring_interval': recurringInterval,
-      'next_due_date': nextDueDate?.millisecondsSinceEpoch,
+      'notes': notes,
+      'service_provider': serviceProvider,
+      'part_numbers': partNumbers,
       'created_at': createdAt.millisecondsSinceEpoch,
       'updated_at': updatedAt.millisecondsSinceEpoch,
     };
@@ -84,17 +79,14 @@ class MaintenanceRecord {
     return MaintenanceRecord(
       id: map['id'],
       bikeId: map['bike_id'],
-      type: map['type'],
+      title: map['title'],
+      category: map['category'],
       date: DateTime.fromMillisecondsSinceEpoch(map['date']),
       odometer: map['odometer'],
-      cost: map['cost'],
-      shopName: map['shop_name'],
-      description: map['description'],
-      isRecurring: map['is_recurring'] == 1,
-      recurringInterval: map['recurring_interval'],
-      nextDueDate: map['next_due_date'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['next_due_date'])
-          : null,
+      cost: map['cost'] ?? 0.0,
+      notes: map['notes'],
+      serviceProvider: map['service_provider'],
+      partNumbers: map['part_numbers'],
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at']),
       updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updated_at']),
     );

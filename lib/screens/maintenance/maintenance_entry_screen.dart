@@ -1,214 +1,176 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import '../../models/maintenance.dart';
-import '../../providers/bike_provider.dart';
-import '../../providers/maintenance_provider.dart';
-import '../../utils/constants.dart';
-import '../../utils/date_formatter.dart';
+import 'package:moto_tracker/models/bike.dart';
+import 'package:moto_tracker/models/maintenance_record.dart';
+import 'package:moto_tracker/models/maintenance_status.dart';
+import 'package:moto_tracker/models/reminder_type.dart';
+import 'package:moto_tracker/providers/bikes_provider.dart';
+import 'package:moto_tracker/providers/maintenance_provider.dart';
+import 'package:moto_tracker/utils/constants.dart';
+import 'package:moto_tracker/utils/helpers.dart';
+import 'package:moto_tracker/widgets/app_bar.dart';
+import 'package:moto_tracker/widgets/custom_dropdown.dart';
 
 class MaintenanceEntryScreen extends StatefulWidget {
-  final Maintenance? maintenance;
-  final bool isEditing;
-  final bool isFromReminder;
-  final MaintenanceReminder? reminder;
+  final String bikeId;
+  final MaintenanceRecord? existingRecord;
 
   const MaintenanceEntryScreen({
-    super.key,
-    this.maintenance,
-    this.isEditing = false,
-    this.isFromReminder = false,
-    this.reminder,
-  });
+    Key? key,
+    required this.bikeId,
+    this.existingRecord,
+  }) : super(key: key);
 
   @override
-  State<MaintenanceEntryScreen> createState() => _MaintenanceEntryScreenState();
+  _MaintenanceEntryScreenState createState() => _MaintenanceEntryScreenState();
 }
 
 class _MaintenanceEntryScreenState extends State<MaintenanceEntryScreen> {
   final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
-
-  // Form controllers
-  final _titleController = TextEditingController();
-  final _odometerController = TextEditingController();
-  final _costController = TextEditingController();
-  final _partsReplacedController = TextEditingController();
-  final _serviceProviderController = TextEditingController();
-  final _notesController = TextEditingController();
-
-  // Form state
-  DateTime _selectedDate = DateTime.now();
-  String? _selectedMaintenanceType;
+  late TextEditingController _typeController;
+  late TextEditingController _odometerController;
+  late TextEditingController _costController;
+  late TextEditingController _shopNameController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _notesController;
+  DateTime _date = DateTime.now();
+  bool _isRecurring = false;
   MaintenanceStatus _status = MaintenanceStatus.completed;
-  File? _receiptImage;
-  String? _receiptPath;
+  bool _isLoading = false;
+  late Bike _bike;
+  String _selectedMaintenanceType = '';
 
   @override
   void initState() {
     super.initState();
-    
-    // If editing, populate form with existing data
-    if (widget.isEditing && widget.maintenance != null) {
-      final maintenance = widget.maintenance!;
-      _titleController.text = maintenance.title;
-      _odometerController.text = maintenance.odometer.toString();
-      _costController.text = maintenance.cost.toString();
-      _partsReplacedController.text = maintenance.partsReplaced ?? '';
-      _serviceProviderController.text = maintenance.serviceProvider ?? '';
-      _notesController.text = maintenance.notes ?? '';
-      _selectedDate = maintenance.date;
-      _selectedMaintenanceType = maintenance.maintenanceType;
-      _status = maintenance.status;
-      _receiptPath = maintenance.receiptUrl;
-    } 
-    // If from reminder, pre-fill with reminder data
-    else if (widget.isFromReminder && widget.reminder != null) {
-      final reminder = widget.reminder!;
-      _titleController.text = reminder.title;
-      _selectedMaintenanceType = reminder.maintenanceType;
-      
-      // For new entries, pre-fill with current odometer reading
-      final bikeProvider = Provider.of<BikeProvider>(context, listen: false);
-      if (bikeProvider.currentBike != null) {
-        _odometerController.text = bikeProvider.currentBike!.currentOdometer.toString();
-      }
+    _typeController = TextEditingController(
+        text: widget.existingRecord?.type ?? '');
+    _odometerController = TextEditingController(
+        text: (widget.existingRecord?.odometer ?? 0).toString());
+    _costController = TextEditingController(
+        text: (widget.existingRecord?.cost ?? 0).toString());
+    _shopNameController = TextEditingController(
+        text: widget.existingRecord?.shopName ?? '');
+    _descriptionController = TextEditingController(
+        text: widget.existingRecord?.description ?? '');
+    _notesController = TextEditingController(
+        text: widget.existingRecord?.notes ?? '');
+
+    if (widget.existingRecord != null) {
+      _date = widget.existingRecord!.date;
+      _isRecurring = widget.existingRecord!.isRecurring;
+      _status = widget.existingRecord!.status;
+      _selectedMaintenanceType = widget.existingRecord!.type;
+    } else {
+      _selectedMaintenanceType = AppConstants.maintenanceTypes.first;
     }
-    // For new entries
-    else {
-      // Pre-fill with current odometer reading
-      final bikeProvider = Provider.of<BikeProvider>(context, listen: false);
-      if (bikeProvider.currentBike != null) {
-        _odometerController.text = bikeProvider.currentBike!.currentOdometer.toString();
-      }
-    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadBikeData();
+    });
   }
 
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _odometerController.dispose();
-    _costController.dispose();
-    _partsReplacedController.dispose();
-    _serviceProviderController.dispose();
-    _notesController.dispose();
-    super.dispose();
+  Future<void> _loadBikeData() async {
+    final bikesProvider = Provider.of<BikesProvider>(context, listen: false);
+    final bike = await bikesProvider.getBike(widget.bikeId);
+    
+    if (mounted) {
+      setState(() {
+        _bike = bike;
+        if (widget.existingRecord == null) {
+          _odometerController.text = bike.currentOdometer.toString();
+        }
+      });
+    }
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate,
+      initialDate: _date,
       firstDate: DateTime(2000),
       lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.current.primary,
+              onPrimary: AppColors.current.onPrimary,
+              onSurface: AppColors.current.text,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     
-    if (picked != null && picked != _selectedDate) {
+    if (picked != null && picked != _date) {
       setState(() {
-        _selectedDate = picked;
+        _date = picked;
       });
     }
   }
 
-  Future<void> _pickReceiptImage() async {
-    try {
-      final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 70,
-      );
-
-      if (image != null) {
-        setState(() {
-          _receiptImage = File(image.path);
-        });
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error picking image: $e'),
-          backgroundColor: AppColors.current.danger,
-        ),
-      );
-    }
-  }
-
-  Future<void> _saveMaintenance() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+  Future<void> _saveMaintenanceRecord() async {
+    if (!_formKey.currentState!.validate()) return;
 
     setState(() {
       _isLoading = true;
     });
 
+    final maintenanceProvider = Provider.of<MaintenanceProvider>(context, listen: false);
+    final bikesProvider = Provider.of<BikesProvider>(context, listen: false);
+    
     try {
-      final bikeProvider = Provider.of<BikeProvider>(context, listen: false);
-      final maintenanceProvider = Provider.of<MaintenanceProvider>(context, listen: false);
-
-      if (bikeProvider.currentBike == null) {
-        throw Exception('No bike selected');
-      }
-
-      final title = _titleController.text;
-      final odometer = double.parse(_odometerController.text);
-      final cost = double.parse(_costController.text);
-      final partsReplaced = _partsReplacedController.text.isEmpty ? null : _partsReplacedController.text;
-      final serviceProvider = _serviceProviderController.text.isEmpty ? null : _serviceProviderController.text;
-      final notes = _notesController.text.isEmpty ? null : _notesController.text;
-
-      if (widget.isEditing && widget.maintenance != null) {
-        // Update existing entry
-        final updatedMaintenance = widget.maintenance!.copyWith(
-          title: title,
-          date: _selectedDate,
-          odometer: odometer,
-          cost: cost,
-          maintenanceType: _selectedMaintenanceType!,
-          partsReplaced: partsReplaced,
-          serviceProvider: serviceProvider,
-          notes: notes,
+      // Get type from controller or dropdown
+      final maintenanceType = _typeController.text.isNotEmpty
+          ? _typeController.text
+          : _selectedMaintenanceType;
+          
+      if (widget.existingRecord != null) {
+        // Update existing record
+        final updatedRecord = widget.existingRecord!.copyWith(
+          type: maintenanceType,
+          date: _date,
+          odometer: double.parse(_odometerController.text),
+          cost: _costController.text.isNotEmpty ? double.parse(_costController.text) : null,
+          shopName: _shopNameController.text.isNotEmpty ? _shopNameController.text : null,
+          description: _descriptionController.text.isNotEmpty ? _descriptionController.text : null,
+          isRecurring: _isRecurring,
           status: _status,
-          // Handling receipt URL would require more complex logic for file upload/update
+          notes: _notesController.text.isNotEmpty ? _notesController.text : null,
         );
-
-        await maintenanceProvider.updateMaintenance(updatedMaintenance);
+        
+        await maintenanceProvider.updateMaintenanceRecord(updatedRecord);
       } else {
-        // Create new entry
-        final newMaintenance = Maintenance(
-          bikeId: bikeProvider.currentBike!.id!,
-          title: title,
-          date: _selectedDate,
-          odometer: odometer,
-          cost: cost,
-          maintenanceType: _selectedMaintenanceType!,
-          partsReplaced: partsReplaced,
-          serviceProvider: serviceProvider,
-          notes: notes,
+        // Create new record
+        final newRecord = MaintenanceRecord(
+          bikeId: widget.bikeId,
+          type: maintenanceType,
+          date: _date,
+          odometer: double.parse(_odometerController.text),
+          cost: _costController.text.isNotEmpty ? double.parse(_costController.text) : null,
+          shopName: _shopNameController.text.isNotEmpty ? _shopNameController.text : null,
+          description: _descriptionController.text.isNotEmpty ? _descriptionController.text : null,
+          isRecurring: _isRecurring,
           status: _status,
-          // Handling receipt URL would require more complex logic for file upload
+          notes: _notesController.text.isNotEmpty ? _notesController.text : null,
         );
-
-        if (widget.isFromReminder && widget.reminder != null) {
-          // Complete the reminder
-          await maintenanceProvider.completeReminder(widget.reminder!.id!, newMaintenance);
-        } else {
-          // Just add maintenance
-          await maintenanceProvider.addMaintenance(newMaintenance, bikeProvider.currentBike!);
-        }
+        
+        await maintenanceProvider.addMaintenanceRecord(newRecord);
       }
-
-      if (mounted) {
-        Navigator.of(context).pop();
+      
+      // Update bike's current odometer if the new reading is higher
+      final currentOdometer = double.parse(_odometerController.text);
+      if (currentOdometer > _bike.currentOdometer) {
+        await bikesProvider.updateBikeOdometer(widget.bikeId, currentOdometer);
       }
-    } catch (error) {
+      
+      Navigator.of(context).pop();
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error saving maintenance: $error'),
-          backgroundColor: AppColors.current.danger,
-        ),
+        SnackBar(content: Text('Error saving maintenance record: $e')),
       );
     } finally {
       if (mounted) {
@@ -220,316 +182,286 @@ class _MaintenanceEntryScreenState extends State<MaintenanceEntryScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    String title = 'Add Maintenance';
-    if (widget.isEditing) {
-      title = 'Edit Maintenance';
-    } else if (widget.isFromReminder) {
-      title = 'Complete Maintenance';
-    }
+  void dispose() {
+    _typeController.dispose();
+    _odometerController.dispose();
+    _costController.dispose();
+    _shopNameController.dispose();
+    _descriptionController.dispose();
+    _notesController.dispose();
+    super.dispose();
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    final isEditing = widget.existingRecord != null;
+    
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
+      appBar: CustomAppBar(
+        title: isEditing ? 'Edit Maintenance' : 'Add Maintenance',
         actions: [
-          if (widget.isEditing)
+          if (isEditing)
             IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: _confirmDelete,
+              icon: Icon(
+                Icons.delete,
+                color: AppColors.current.error,
+              ),
+              onPressed: () {
+                // Show confirmation dialog
+                showConfirmationDialog(
+                  context,
+                  title: 'Delete Record',
+                  message: 'Are you sure you want to delete this maintenance record?',
+                  confirmText: 'Delete',
+                ).then((confirmed) async {
+                  if (confirmed) {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    
+                    try {
+                      final maintenanceProvider = Provider.of<MaintenanceProvider>(context, listen: false);
+                      await maintenanceProvider.deleteMaintenanceRecord(widget.existingRecord!.id!);
+                      Navigator.of(context).pop();
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error deleting record: $e')),
+                      );
+                    } finally {
+                      if (mounted) {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
+                    }
+                  }
+                });
+              },
             ),
         ],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator(color: AppColors.current.accent))
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Title
-                    TextFormField(
-                      controller: _titleController,
-                      decoration: const InputDecoration(
-                        labelText: 'Maintenance Title',
-                        hintText: 'E.g., Oil Change, Chain Cleaning',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a title';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Maintenance Type
-                    DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(
-                        labelText: 'Maintenance Type',
-                      ),
-                      value: _selectedMaintenanceType,
-                      items: AppConstants.maintenanceTypes.map((type) {
-                        return DropdownMenuItem<String>(
-                          value: type,
-                          child: Text(type),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedMaintenanceType = value;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please select a maintenance type';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Date and Odometer
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Date Picker
-                        Expanded(
-                          child: InkWell(
-                            onTap: () => _selectDate(context),
-                            child: InputDecorator(
-                              decoration: const InputDecoration(
-                                labelText: 'Date',
-                                suffixIcon: Icon(Icons.calendar_today),
-                              ),
-                              child: Text(
-                                DateFormatter.formatDate(_selectedDate),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        // Odometer
-                        Expanded(
-                          child: TextFormField(
-                            controller: _odometerController,
-                            decoration: const InputDecoration(
-                              labelText: 'Odometer',
-                              suffixText: 'km',
-                            ),
-                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Required';
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Maintenance Type Dropdown
+                      CustomDropdown<String>(
+                        label: 'Maintenance Type',
+                        value: _selectedMaintenanceType,
+                        items: AppConstants.maintenanceTypes.map((type) {
+                          return DropdownMenuItem<String>(
+                            value: type,
+                            child: Text(type),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              _selectedMaintenanceType = value;
+                              if (_typeController.text.isEmpty || 
+                                  AppConstants.maintenanceTypes.contains(_typeController.text)) {
+                                _typeController.text = value;
                               }
-                              final odometer = double.tryParse(value);
-                              if (odometer == null) {
-                                return 'Invalid number';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Cost
-                    TextFormField(
-                      controller: _costController,
-                      decoration: const InputDecoration(
-                        labelText: 'Cost',
-                        prefixText: '\$',
-                      ),
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Required';
-                        }
-                        final cost = double.tryParse(value);
-                        if (cost == null) {
-                          return 'Invalid number';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Parts Replaced
-                    TextFormField(
-                      controller: _partsReplacedController,
-                      decoration: const InputDecoration(
-                        labelText: 'Parts Replaced (Optional)',
-                        hintText: 'E.g., Oil filter, brake pads',
-                      ),
-                      maxLines: 2,
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Service Provider
-                    TextFormField(
-                      controller: _serviceProviderController,
-                      decoration: const InputDecoration(
-                        labelText: 'Service Provider (Optional)',
-                        hintText: 'E.g., Dealer name, mechanic',
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Notes
-                    TextFormField(
-                      controller: _notesController,
-                      decoration: const InputDecoration(
-                        labelText: 'Notes (Optional)',
-                        hintText: 'Add any additional details here',
-                      ),
-                      maxLines: 3,
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Receipt Image
-                    if (widget.isEditing && _receiptPath != null) ...[
-                      Text(
-                        'Existing Receipt:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.text,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(_receiptPath!),
-                      const SizedBox(height: 16),
-                    ],
-
-                    if (_receiptImage != null) ...[
-                      Text(
-                        'Selected Receipt:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.text,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        height: 100,
-                        child: Image.file(_receiptImage!),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.camera_alt),
-                      label: const Text('Add Receipt Photo'),
-                      onPressed: _pickReceiptImage,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey[300],
-                        foregroundColor: AppColors.text,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Status (only for editing)
-                    if (widget.isEditing) ...[
-                      Text(
-                        'Status:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.text,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      SegmentedButton<MaintenanceStatus>(
-                        segments: [
-                          ButtonSegment<MaintenanceStatus>(
-                            value: MaintenanceStatus.completed,
-                            label: const Text('Completed'),
-                            icon: const Icon(Icons.check_circle),
-                          ),
-                          ButtonSegment<MaintenanceStatus>(
-                            value: MaintenanceStatus.scheduled,
-                            label: const Text('Scheduled'),
-                            icon: const Icon(Icons.schedule),
-                          ),
-                          ButtonSegment<MaintenanceStatus>(
-                            value: MaintenanceStatus.overdue,
-                            label: const Text('Overdue'),
-                            icon: const Icon(Icons.warning),
-                          ),
-                        ],
-                        selected: {_status},
-                        onSelectionChanged: (Set<MaintenanceStatus> selected) {
-                          setState(() {
-                            _status = selected.first;
-                          });
+                            });
+                          }
                         },
                       ),
-                      const SizedBox(height: 24),
-                    ],
-
-                    // Save Button
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _saveMaintenance,
-                        child: Text(widget.isEditing ? 'Update' : 'Save'),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Custom Type Input (if needed)
+                      TextFormField(
+                        controller: _typeController,
+                        decoration: const InputDecoration(
+                          labelText: 'Custom Type (if not listed above)',
+                          border: OutlineInputBorder(),
+                        ),
                       ),
-                    ),
-                  ],
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Date Picker
+                      Text(
+                        'Date',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.current.text,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: () => _selectDate(context),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                DateFormat('MMMM dd, yyyy').format(_date),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: AppColors.current.text,
+                                ),
+                              ),
+                              Icon(
+                                Icons.calendar_today,
+                                color: AppColors.current.primary,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Odometer Reading
+                      TextFormField(
+                        controller: _odometerController,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        decoration: const InputDecoration(
+                          labelText: 'Odometer Reading (km)',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter the odometer reading';
+                          }
+                          if (double.tryParse(value) == null) {
+                            return 'Please enter a valid number';
+                          }
+                          return null;
+                        },
+                      ),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Cost
+                      TextFormField(
+                        controller: _costController,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        decoration: const InputDecoration(
+                          labelText: 'Cost (\$)',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value != null && value.isNotEmpty) {
+                            if (double.tryParse(value) == null) {
+                              return 'Please enter a valid number';
+                            }
+                          }
+                          return null;
+                        },
+                      ),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Shop Name
+                      TextFormField(
+                        controller: _shopNameController,
+                        decoration: const InputDecoration(
+                          labelText: 'Shop Name',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Description
+                      TextFormField(
+                        controller: _descriptionController,
+                        decoration: const InputDecoration(
+                          labelText: 'Description',
+                          border: OutlineInputBorder(),
+                        ),
+                        maxLines: 2,
+                      ),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Notes
+                      TextFormField(
+                        controller: _notesController,
+                        decoration: const InputDecoration(
+                          labelText: 'Notes',
+                          border: OutlineInputBorder(),
+                        ),
+                        maxLines: 3,
+                      ),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Recurring Checkbox
+                      CheckboxListTile(
+                        title: const Text('Is Recurring Maintenance?'),
+                        value: _isRecurring,
+                        activeColor: AppColors.current.primary,
+                        contentPadding: EdgeInsets.zero,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              _isRecurring = value;
+                            });
+                          }
+                        },
+                      ),
+                      
+                      const SizedBox(height: 16),
+                      
+                      // Status Dropdown for Editing
+                      if (isEditing)
+                        CustomDropdown<MaintenanceStatus>(
+                          label: 'Status',
+                          value: _status,
+                          items: MaintenanceStatus.values.map((status) {
+                            return DropdownMenuItem<MaintenanceStatus>(
+                              value: status,
+                              child: Text(status.displayName),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            if (value != null) {
+                              setState(() {
+                                _status = value;
+                              });
+                            }
+                          },
+                        ),
+                      
+                      const SizedBox(height: 24),
+                      
+                      // Save Button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: _saveMaintenanceRecord,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.current.primary,
+                            foregroundColor: AppColors.current.onPrimary,
+                          ),
+                          child: Text(
+                            isEditing ? 'Update Record' : 'Save Record',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-    );
-  }
-
-  void _confirmDelete() {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Delete Maintenance'),
-        content: const Text(
-          'Are you sure you want to delete this maintenance record? This action cannot be undone.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.of(ctx).pop();
-              setState(() {
-                _isLoading = true;
-              });
-
-              try {
-                final maintenanceProvider = Provider.of<MaintenanceProvider>(context, listen: false);
-                await maintenanceProvider.deleteMaintenance(widget.maintenance!.id!);
-                if (mounted) {
-                  Navigator.of(context).pop();
-                }
-              } catch (error) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Error deleting maintenance: $error'),
-                    backgroundColor: AppColors.current.danger,
-                  ),
-                );
-              } finally {
-                if (mounted) {
-                  setState(() {
-                    _isLoading = false;
-                  });
-                }
-              }
-            },
-            child: Text(
-              'Delete',
-              style: TextStyle(color: AppColors.current.danger),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
